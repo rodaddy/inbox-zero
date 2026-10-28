@@ -1,0 +1,55 @@
+{
+  "classifier": {
+    "base_url": null,
+    "model": "Qwen3-4B-Instruct-2507-4bit",
+    "requires_key": false
+  },
+  "credentials": {
+    "google_client_id": "REPLACE-ME.apps.googleusercontent.com",
+    "microsoft_client_id": "4be80172-cace-49cd-bbee-cef34841c8fb"
+  },
+  "drafts_enabled": {
+    "google": false,
+    "microsoft": false
+  },
+  "env": "prod",
+  "folder_prefix": "",
+  "logging": {
+    "file_sink": true,
+    "json_sink": true,
+    "level": "INFO",
+    "retention": 3,
+    "rotation": "1 MB",
+    "verbose_tracebacks": false
+  },
+  "mailbox_scope": {
+    "google": {
+      "excluded_folders": [],
+      "include_archive": false,
+      "include_deleted": false,
+      "include_junk": false,
+      "included_folders": [],
+      "mode": "inbox_only",
+      "names_encode_nesting": true
+    },
+    "microsoft": {
+      "excluded_folders": [],
+      "include_archive": false,
+      "include_deleted": false,
+      "include_junk": false,
+      "included_folders": [],
+      "mode": "inbox_only",
+      "names_encode_nesting": false
+    }
+  },
+  "posture": "file_only",
+  "provider": "google",
+  "voice_routing": {
+    "default_voice": "external",
+    "internal_voice": "internal",
+    "owner_domain": "example.com",
+    "sales_labels": [],
+    "sales_voice": "sales",
+    "voices": ["internal", "external", "sales"]
+  }
+}

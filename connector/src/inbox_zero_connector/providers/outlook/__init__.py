@@ -1,0 +1,56 @@
+"""Outlook - the Microsoft Graph adapter, split along its containment seams.
+
+``provider.OutlookProvider`` implements ``providers.base.MailProvider`` and
+nothing wider. The token it holds is ``Mail.ReadWrite``, which Microsoft's own
+permission text excludes from sending, so no-send here is scope-layer on
+every install. The package exists because the adapter sat at the
+500-code-line ceiling; each module below was moved out WHOLE along a real
+boundary, and ``tests/providers/outlook/test_outlook_provider.py`` enumerates
+every module on disk so a move cannot carry code out from under the
+structural scans.
+
+The seams are containment rules. ``evidence`` refuses degenerate values (an
+unresolved folder id is ``None``, never ``""``); ``errors`` decides what may
+leave a failed response and reach a log line; ``models`` types the wire shapes
+so absent data is one decision, not a ``.get()`` chain per call site;
+``categories`` does the read-union-write under ``If-Match`` so a label is
+added, never overwritten; ``delta`` is one per-folder change round; ``reauth``
+is one retry, and only one, after a 401 mid-run; ``consent`` is the two
+interactive sign-in flows, browser first. ``provider`` is the only
+module that holds the HTTP client and the credential.
+
+Key Components:
+    - provider: ``OutlookProvider`` - auth, read, move, flag, sent sampling,
+      reply drafts; ``_graph_path`` is the ONLY caller of the id guard.
+    - models: pydantic ``Graph*`` response shapes, ``extra="ignore"``.
+    - evidence: ``ResolvedId``, ``parse_date_bound``, ``caller_headers``.
+    - errors: OData error envelope to ``ProviderError``, no body echo.
+    - categories: ``apply_category`` with ETag-guarded union.
+    - delta: ``poll_changes`` over ``messages/delta``.
+    - reauth: ``with_reauth_once`` and ``refresh_credential``; wraps OUTSIDE
+      tenacity and INSIDE ``_unwrap``, and that order is documented.
+    - consent: the CLI-only interactive flows, browser (PKCE) first and
+      device code second, because Entra security defaults block device code.
+
+Pattern/Convention:
+    Construct through ``providers.get_provider("microsoft", ...)``, never by
+    importing ``OutlookProvider`` directly. ``provider.py`` is at the size
+    ceiling: new behaviour lands in a sibling module with its own test file
+    under ``tests/providers/outlook/``, and any code that builds a URL path or
+    an OData filter stays behind ``_graph_path`` / ``_odata_filter`` so the
+    AST scans keep resolving.
+
+Example:
+    >>> from inbox_zero_connector.providers.outlook.evidence import parse_date_bound
+    >>> parse_date_bound("2026-08-20")
+    '2026-08-20'
+
+See Also:
+    - inbox_zero_connector.providers.base: the interface and its absences.
+    - inbox_zero_connector.providers.gmail: the Google sibling; the no-echo
+      refusal policy is shared.
+    - inbox_zero_connector.providers.retry: the bounded retry both adapters
+      run under.
+"""
+
+from __future__ import annotations

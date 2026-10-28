@@ -1,0 +1,120 @@
+"""rTech mailroom MCP connector -- Stage 2 (triage + voice + reply drafts).
+
+Least-privilege read / file / flag / draft access to Gmail and Microsoft Graph
+mailboxes, exposed to a host AI over MCP stdio. The buyer's tenant, the buyer's
+app registration, the buyer's keychain: rTech hosts nothing and holds nothing.
+
+DETERMINISM-FIRST, AND WHAT THAT MEANS FOR THE DIVISION OF LABOUR. This package
+owns every mailbox action. The AI decides WHICH message goes WHERE; the code
+performs the move, validates it against a closed taxonomy before any API call,
+and receipts it to an append-only ledger. The AI never touches a mail API and
+never writes the ledger -- there is deliberately no tool that would let it,
+because an audit trail its subject can decline to write is not an audit trail.
+The rule pass in ``services.triage.decide`` runs before any model and short-circuits, so every
+message a deterministic rule settles is a message no hostile email influences.
+
+CAPABILITY IS BOUNDED THREE TIMES, AND A CAPABILITY MUST CLEAR ALL THREE.
+``services.auth.scopes`` bounds what is ever ASKED FOR; it is a build-time declaration of
+intent, identical on every install, and evidence of nothing on its own.
+``providers.base`` bounds what is ever IMPLEMENTED -- there is no send, delete,
+or forward method anywhere in this package, and ``create_draft`` takes no
+recipient argument. That absence, not a guard, is the security boundary: a
+misconfigured guard still calls the endpoint, a method that does not exist
+cannot be called. ``services.auth.grants`` bounds what is PERMITTED, read off the live
+credential's granted scope list rather than off our request, so an operator who
+consents to less than was asked for gets a narrower connector because their own
+tenant said so and can verify it in their own admin console.
+
+WHERE THE NO-SEND GUARANTEE LIVES DEPENDS ON THE INSTALL, AND THIS PACKAGE SAYS
+SO RATHER THAN AVERAGING IT. Microsoft is always scope-layer: ``Mail.ReadWrite``
+covers drafts and is refused by both send paths. Google is scope-layer under
+domain-wide delegation with drafts off, and code-layer with drafts on, because
+Gmail has no compose-without-send scope -- ``users.drafts.create`` and
+``users.drafts.send`` accept an identical scope set. Interactive Gmail consent is
+code-layer either way, since ``gmail.modify.restricted`` is DWD-only and a
+consent screen refuses it. ``scopes.enforcement_for`` answers this for a given
+CONFIG; ``grants.discover`` answers what the account actually permitted, and
+where the two disagree the grant is the one that decides.
+
+Key Components:
+    - config: THE KEYSTONE. The only module permitted an environment read, a
+      config-file load, or a logging-sink setup. Owns settings precedence and
+      the voice routing table; a second environment reader fails the build.
+      Repo-side defaults live in ``config/`` and credentials-only overrides
+      in ``secrets/`` (see each folder's README).
+    - services: the domain logic, one package per concern.
+        - services.auth: ``scopes`` (the OAuth security manifest, the only
+          place a scope string is defined), ``grants`` (what the ACCOUNT
+          granted, fails closed), ``keychain`` (OS keychain only; nothing
+          token-like is written to a file or logged).
+        - services.triage: ``taxonomy`` (the closed folder vocabulary, no
+          add-folder tool), ``decide`` (THE DECISION LAYER, pure, rules first
+          and short-circuit), ``learned`` (correction rows a deterministic
+          pass evaluates before the model), ``corrections`` (the ONLY writer
+          of the learned-rule store).
+        - services.voice: ``profile`` (the stored voice profile) and
+          ``drafting`` (constrained reply drafts in that voice).
+        - services.audit: ``ledger``, the append-only audit ledger. Opened
+          "a", never "w"; records actions, never mail content.
+        - services.watch: ``round`` (ONE polling round, no daemon, no sleep),
+          ``loop`` (repeats the round), ``state`` (opaque cursors, resync
+          generations, replay window), ``scope`` (which containers the
+          watcher may read - answered once by a human).
+        - services.reset: the developer/test mailbox-reset fixture.
+    - classifiers: model-backed implementations of the ``Classifier``
+      protocol, for the ambiguous remainder the rules declined to guess at.
+    - providers: the adapters and ``MailProvider``, the interface whose
+      ABSENCES are the boundary. Construct via ``get_provider``, never by
+      importing an adapter class directly. ``gmail`` and ``outlook`` are
+      packages; ``retry``, ``containers``, ``granted`` are shared.
+    - apps: the runnable surfaces. ``apps.server`` is the MCP stdio server -
+      exactly ten tools, four mutating, every one receipted. ``apps.cli`` is
+      the command line; authentication is a deliberate CLI step because an
+      interactive flow cannot run inside a tool call.
+    - utils: the shared floor -- logging redaction, the three writable paths,
+      and the ``Section`` vocabulary. Imported BY the packages above, never
+      the reverse.
+
+Pattern/Convention:
+    This ``__init__`` exports only ``__version__``, and that is the convention
+    rather than an omission. Every other name is imported from the module that
+    owns it -- ``from inbox_zero_connector.services.auth.scopes import enforcement_for`` --
+    so each symbol has exactly one import path and a reader of a call site can
+    find the definition without a hop through here. Re-exporting a curated
+    subset would create a second, shorter path to the same object and make the
+    root a place where the package's shape has to be maintained by hand.
+
+    Read the boundary before extending anything. Adding a CAPABILITY is not a
+    feature change: it means changing ``providers.base``, which is a
+    security-posture change and requires revisiting ``scopes``, the ``grants``
+    tables, the enforcement table in the README, and every buyer-facing claim
+    in the kit. Adding a PROVIDER is a package under ``providers`` plus one factory row. Adding a
+    classification backend is a module in ``classifiers``, never a class per
+    vendor.
+
+Example:
+    >>> from inbox_zero_connector.services.auth.scopes import enforcement_for, scopes_for
+    >>> scopes_for("google", drafts_enabled=False, auth_mode="dwd")
+    ('https://www.googleapis.com/auth/gmail.readonly',
+     'https://www.googleapis.com/auth/gmail.modify.restricted')
+    >>> enforcement_for("google", drafts_enabled=False, auth_mode="dwd")
+    'scope-layer'
+    >>> enforcement_for("google", drafts_enabled=True, auth_mode="dwd")
+    'code-layer'
+    >>> from inbox_zero_connector.services.triage.taxonomy import default_taxonomy
+    >>> default_taxonomy().folders[:2]
+    ('Business-Action', 'Business-Waiting')
+
+See Also:
+    - inbox_zero_connector.services.auth.scopes: what is ASKED FOR, and the enforcement layer
+      per provider and config.
+    - inbox_zero_connector.services.auth.grants: what the account ANSWERED. Wins over the ask.
+    - inbox_zero_connector.providers.base: the interface, and the send / delete
+      / forward methods deliberately absent from it.
+    - inbox_zero_connector.apps.server.main: the ten tools and the security contract the
+      host AI operates under.
+"""
+
+from __future__ import annotations
+
+__version__ = "0.2.15"

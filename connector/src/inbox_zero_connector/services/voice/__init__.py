@@ -1,0 +1,35 @@
+"""The Enhancements lane - voice profiles and reply drafts. Never sends.
+
+This package is the AI tier and is deliberately severable: the base kit and
+Guardian ship without it, which is why nothing outside ``apps`` and the
+drafting path may depend on it. A profile describes HOW the owner writes -
+patterns, never stored prose - and a draft is always created in the owner's
+mailbox for THEIR review.
+
+Key Components:
+    - profile: the voice-profile store - patterns in, patterns out, no
+      message text retained.
+    - corpus: the corpus-source seam - one Protocol yielding a profile
+      document, so sent mail and external material build the same way.
+    - drafting: what triggers a reply draft, and what refuses one - the
+      posture gate lives on this path.
+
+Pattern/Convention:
+    Every write this package causes is a DRAFT via a provider's
+    ``create_draft``; there is no send call to gate because none exists in
+    the package. Refusals are first-class results, not exceptions - a
+    refused draft is a correct outcome.
+
+Example:
+    >>> from inbox_zero_connector.services.voice import drafting
+    >>> drafting.__name__
+    'inbox_zero_connector.services.voice.drafting'
+
+See Also:
+    - inbox_zero_connector.providers.base: ``create_draft`` and its
+      deliberate absences.
+    - scripts/voice_corpus: the synthetic bench fixture that falsifies the
+      profiler.
+"""
+
+from __future__ import annotations

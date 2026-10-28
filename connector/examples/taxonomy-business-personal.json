@@ -1,0 +1,40 @@
+{
+  "folders": [
+    {
+      "name": "Business-Action",
+      "description": "Work mail the owner must personally answer or decide. File here only when the next move is the owner's: a question addressed to them, an approval, a decision, a deadline they own. If the next move belongs to someone else, it is Business-Waiting."
+    },
+    {
+      "name": "Business-Waiting",
+      "description": "Work mail where the owner has already done their part and is blocked on someone else's reply, delivery, or signature. The distinguishing test against Business-Action is whose court the ball is in: here it is not the owner's, so the only pending act is a follow-up if the other side goes quiet."
+    },
+    {
+      "name": "Business-Reference",
+      "description": "Work mail worth keeping with nothing to do: confirmations of things already settled, documents and policies to look up later, FYI threads the owner was copied on. If reading it produces no task for anyone, it belongs here rather than in either Action folder."
+    },
+    {
+      "name": "Personal-Action",
+      "description": "Non-work mail that needs a reply or an act from the owner -- family, friends, doctors, schools, personal accounts and admin. Same next-move-is-mine test as Business-Action; the split is only whether the matter is the owner's business or the owner's life."
+    },
+    {
+      "name": "Personal-Reference",
+      "description": "Non-work mail worth keeping with nothing to do: travel confirmations, appointment details, personal records, correspondence to keep. Anything here that later needs an act belongs in Personal-Action instead."
+    },
+    {
+      "name": "Receipts",
+      "description": "Proof of a transaction: invoices, order confirmations, shipping notices, statements, payment and renewal receipts, business or personal alike. Receipts wins over the Reference folders when the message records money moving, because that is what the owner searches for at tax time. A bill that is unpaid and due is an Action, not a receipt."
+    },
+    {
+      "name": "Newsletters",
+      "description": "Bulk mail the owner deliberately subscribed to and would notice the absence of: publications, digests, product updates from tools in use, communities joined. The test against Not-Interested is consent -- the owner asked for this, so it is filed rather than dismissed."
+    },
+    {
+      "name": "Not-Interested",
+      "description": "Bulk or targeted mail the owner never asked for and does not want: cold sales outreach, recruiter spray, vendor pitches, promotions from one-time purchases, conference and webinar invitations out of the blue. Unwanted, but not deleted -- filing it here keeps the inbox clear while leaving it findable if the owner turns out to want it."
+    },
+    {
+      "name": "Review",
+      "description": "The uncertainty bucket. File here when the message does not clearly fit one of the folders above -- ambiguous purpose, mixed personal and business, an unknown sender who might matter, anything the classifier would otherwise be guessing at. Choosing this is a correct answer, never a failure: a classifier forced to guess either buries what mattered or floods Action with noise, and either one teaches the owner to stop trusting the system. Saying 'I do not know' here is the same instinct as the connector refusing to send."
+    }
+  ]
+}

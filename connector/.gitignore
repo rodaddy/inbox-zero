@@ -1,0 +1,37 @@
+# uv/tooling runtime dirs. These exist by tool design inside a uv project and
+# are tolerated locally, but a TRACKED .venv or tool cache is a hard violation
+# of the repo's hidden-file law (AGENTS.md, Rico ruling 2026-08-17).
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Never commit real credentials or a local taxonomy/ledger. Config and data
+# live in the OS-standard user dirs (see paths.py), never in the repo.
+.env
+*.jsonl
+
+# The synthetic voice corpus is generated data, byte-reproducible from the
+# seed recorded in its MANIFEST.json. Regenerate, never commit:
+#   cd scripts && uv run python -m voice_corpus.generate
+scripts/voice_corpus/corpus/
+
+# Built kit zips. They are BUILD OUTPUTS of this one codebase (#107 ruling:
+# tiers are not separate repos), reproducible from a tagged commit by
+#   uv run python scripts/packaging/build_zips.py --tier all
+# so the artifact is never the record -- the commit is.
+dist/
+# dist-ci/ is the same output under the name CI builds into, so a local
+# reproduction of the workflow leaves no untracked artifact behind.
+dist-ci/
+
+# secrets/ is an ALLOWLIST: real values can never be committed by forgetting a
+# blocklist entry. Only the example and the README are tracked.
+secrets/*
+!secrets/*.example.json
+!secrets/README.md
+
+# Install transcripts (install.sh / install.ps1). Per-machine records, never tracked.
+logs/

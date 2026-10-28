@@ -1,0 +1,5 @@
+{
+  "env": "test",
+  "logging": { "level": "DEBUG", "verbose_tracebacks": true },
+  "posture": "file_only"
+}

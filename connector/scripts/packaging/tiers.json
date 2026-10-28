@@ -1,0 +1,70 @@
+{
+  "ship": [
+    "src",
+    "tests",
+    "config",
+    "scripts",
+    "docs",
+    "examples",
+    "pyproject.toml",
+    "uv.lock",
+    "requirements.txt",
+    "VERSION",
+    "CHANGELOG.md",
+    "README.md",
+    "AGENTS.md",
+    "INSTALL-RUNBOOK.md",
+    "install.sh",
+    "install.ps1",
+    "secrets/config.example.json",
+    "secrets/README.md",
+    "LICENSE.md"
+  ],
+  "never_ship": [
+    "tests/scripts/**",
+    "scripts/voice_corpus/**",
+    "**/__pycache__/**",
+    "**/.pytest_cache/**",
+    "**/.venv/**",
+    "**/.mypy_cache/**",
+    "**/.ruff_cache/**",
+    "**/HANDOFF-RULES.md",
+    "**/_DOCS/**",
+    "**/_reports/**",
+    "**/GOTCHAS*",
+    "**/_graph/**",
+    "**/CLIENT-BETA-NOTE.md",
+    "secrets/config.json",
+    "**/.env*",
+    "scripts/packaging/**",
+    "profiles/**",
+    "**/RESTRUCTURE-HANDOFF.md",
+    "docs/google-external-client-setup.md"
+  ],
+  "tiers": {
+    "enhanced": {
+      "exclude": [],
+      "forbidden_content": [],
+      "config_pins": {}
+    },
+    "basic": {
+      "exclude": [
+        "src/inbox_zero_connector/services/voice/**",
+        "src/inbox_zero_connector/apps/cli/voice.py",
+        "tests/services/voice/**",
+        "tests/apps/cli/test_cli_voice.py",
+        "tests/services/watch/test_watcher_drafting.py",
+        "docs/security/write-paths.md"
+      ],
+      "forbidden_content": [
+        "inbox_zero_connector.services.voice",
+        "inbox_zero_connector/services/voice"
+      ],
+      "config_pins": {
+        "posture": "file_only",
+        "drafts_enabled.google": false,
+        "drafts_enabled.microsoft": false
+      }
+    }
+  }
+}

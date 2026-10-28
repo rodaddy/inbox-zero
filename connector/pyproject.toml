@@ -1,0 +1,328 @@
+[project]
+name = "inbox-zero-connector"
+version = "0.2.15"
+license = { text = "All rights reserved" }
+description = "rTech mailroom MCP connector: least-privilege read/file/flag/draft access to Gmail and Microsoft Graph mailboxes. Stage 2 (triage, voice, reply drafts). No send code path."
+requires-python = ">=3.14"
+dependencies = [
+    # v2 relocated the server class (FastMCP -> mcp.server.mcpserver.MCPServer);
+    # upper-bounded so a future major cannot move it again unnoticed.
+    "mcp>=2.0,<3",
+    "google-api-python-client>=2.140",
+    "google-auth-oauthlib>=1.2",
+    "google-auth>=2.34",
+    "msal>=1.31",
+    "httpx>=0.27",
+    "keyring>=25.4",
+    "platformdirs>=4.3",
+    # PEP 440 comparison for `update-check` (#67). Declared directly rather than
+    # leaned on transitively, and hand-rolled string comparison is not the
+    # alternative: "0.2.9" > "0.2.10" is true as strings and false as versions.
+    "packaging>=24",
+    # Standards toolchain (_DOCS/STANDARDS-python.md ## Toolchain). Each of
+    # these replaces something this package would otherwise hand-roll:
+    #   pydantic/pydantic-settings -- models, validation, layered config load
+    #   loguru                     -- sinks, rotation, retention, JSON
+    #   tenacity                   -- retry/backoff on outbound provider calls
+    "pydantic>=2.9",
+    "pydantic-settings>=2.5",
+    "loguru>=0.7",
+    "tenacity>=9.0",
+    # The client for the OpenAI CHAT-COMPLETIONS PROTOCOL, not for one vendor.
+    # It is the maintained implementation of the API shape OpenRouter, OpenAI,
+    # Azure, Ollama, LM Studio, and vLLM all speak, so one dependency reaches
+    # every model backend this connector supports -- swapped by base_url and
+    # model id, never by a second client class. See classifiers/openai_compatible.
+    # Upper-bounded: a major has moved the client surface before (0.x -> 1.0).
+    "openai>=1.50,<3",
+]
+
+[project.scripts]
+inbox-zero-connector = "inbox_zero_connector.apps.cli.main:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "ruff>=0.6",
+    "mypy>=1.11",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/inbox_zero_connector"]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+# scripts/ is a first-party root too: voice_corpus lives there, and without
+# this isort files its own absolute imports with third-party ones.
+src = ["src", "tests", "scripts"]
+
+# REQUIRED for PLR1702 (too-many-nested-blocks), the mechanical enforcement of
+# the no-nested-conditionals LAW. Without preview ruff prints "Selection
+# PLR1702 has no effect because preview is not enabled" and exits 0 -- a check
+# reporting success while examining nothing.
+# _DOCS/STANDARDS-python.md ## LAW: flat control flow.
+preview = true
+
+[tool.ruff.lint]
+# Named individually, never the whole `PL` family: `PL` drags in ~40 unrelated
+# pylint rules, and a rule set that produces noise gets blanket-ignored.
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "N",      # pep8-naming
+    "UP",     # pyupgrade
+    "B",      # flake8-bugbear
+    "A",      # flake8-builtins
+    "C4",     # flake8-comprehensions
+    "DTZ",    # flake8-datetimez -- no naive datetime.now()
+    "T20",    # flake8-print -- no stray print() in library code. Load-bearing
+              # HERE beyond the usual reason: stdout is the MCP protocol
+              # channel and one stray print corrupts the framing.
+    "T10",    # flake8-debugger
+    "SIM",    # flake8-simplify
+    "PTH",    # flake8-use-pathlib
+    "RUF",    # ruff's own rules
+    "S",      # flake8-bandit
+    "BLE",    # flake8-blind-except -- bare except / except Exception
+    "RET",    # flake8-return -- else-after-return, the usual cause of nesting
+    "TRY",    # tryceratops
+    "too-many-nested-blocks",  # too-many-nested-blocks -- THE nested-if enforcement
+    "too-many-branches",  # too-many-branches -- the long if/elif chain
+    "complex-structure",     # mccabe complexity
+    "too-many-statements",  # too-many-statements
+    "too-many-arguments",  # too-many-arguments
+    "commented-out-code",   # commented-out code (spelled ERA001; "eradicate" silently no-ops)
+    "empty-comment",  # empty comment
+]
+
+ignore = [
+    # The formatter owns line wrapping; leaving E501 on makes `ruff format` and
+    # `ruff check` disagree about the same line.
+    "line-too-long",
+    # TRY003 bans long messages inside raise. This package deliberately does
+    # the opposite: every error states what broke, where, and what to do
+    # (_DOCS/STANDARDS-python.md ## Fail fast, with the remediation in the
+    # message), and those messages are read by a host AI that has no other
+    # channel to learn the remediation.
+    "raise-vanilla-args",
+    # TRY400 wants logger.exception() inside except. This package uses
+    # logger.error(..., exc_info=True) uniformly because the observability
+    # standard names that spelling; the traceback is emitted either way.
+    "error-instead-of-exception",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"src/inbox_zero_connector/utils/__init__.py" = ["non-empty-init-module"]
+# The CLI's product IS its stdout. A CLI cannot deliver a scope manifest
+# through the logger, which writes to sinks. Scoped to cli.py so nothing else
+# in the package may print -- which matters here because the MCP server shares
+# this process's stdout with the protocol.
+"src/inbox_zero_connector/apps/cli/main.py" = ["T20"]
+# Same exemption, same reason: credentials.py holds the auth/logout verbs, split
+# out of main.py for the code-line ceiling. The scope trade it prints IS the
+# thing being consented to, and it is printed at the consent screen rather than
+# in a doc read later. CLI-only; the server process never imports it.
+"src/inbox_zero_connector/apps/cli/credentials.py" = ["T20"]
+# Same exemption, same reason: desktop.py is the desktop-config subcommand's
+# renderer, split out of main.py for the code-line ceiling. Its stdout is the
+# product; it never runs in the server process.
+"src/inbox_zero_connector/apps/cli/desktop.py" = ["T20"]
+# Same exemption, same reason: service_unit.py renders the launchd/systemd unit
+# for the service-unit subcommand. The unit text IS the product -- the operator
+# pipes or pastes it -- and it never runs in the server process.
+"src/inbox_zero_connector/apps/cli/service_unit.py" = ["T20"]
+# Same exemption: init_config.py is the flag-driven posture writer, split out
+# of main.py for the code-line ceiling. Its report IS its product; CLI-only.
+"src/inbox_zero_connector/apps/cli/init_config.py" = ["T20"]
+# Same exemption: dry_run_preview.py renders the watch --once --dry-run
+# preview table. The table IS the product -- the operator reads WOULD CREATE
+# before the first real pass -- and it never runs in the server process (#66).
+"src/inbox_zero_connector/apps/cli/dry_run_preview.py" = ["T20"]
+# Same exemption: status.py renders the watcher health readout for `status`.
+# The report IS the product, beside its exit code, and it never runs in the
+# server process (#64).
+"src/inbox_zero_connector/apps/cli/status.py" = ["T20"]
+# Same exemption, sharper case: uninstall.py's product IS its stdout, because
+# the guided offboarder's whole value is the steps it deliberately does NOT
+# take for the operator -- the bootout line, the revocation URL, the rm it
+# prints rather than runs (#68). CLI-only; never in the server process.
+"src/inbox_zero_connector/apps/cli/uninstall.py" = ["T20"]
+# Same exemption: undo.py renders the reversal preview for the undo subcommand.
+# The table IS the product, and so is the printed reason the mailbox is left
+# alone -- an operator who is not told why concludes the verb is broken (#66).
+# CLI-only; never in the server process.
+"src/inbox_zero_connector/apps/cli/undo.py" = ["T20"]
+# Same exemption: update.py prints the update-check verdict. That single line IS
+# the product -- the operator is told whether a newer build exists and the one
+# path to it, because nothing replaces itself (#67, D13). CLI-only.
+"src/inbox_zero_connector/apps/cli/update.py" = ["T20"]
+# Same exemption again: setup.py is the interactive first-install wizard, split
+# out of main.py for the code-line ceiling. Its prompts and its report ARE its
+# product, and it refuses to run without a TTY on both streams, so it can never
+# print into the server process's protocol channel.
+"src/inbox_zero_connector/apps/cli/setup.py" = ["T20"]
+# Same exemption again: show_scopes.py is the scope-manifest renderer, split
+# out of main.py for the code-line ceiling. Its stdout is the product, and it
+# is CLI-only -- the server process never imports it.
+"src/inbox_zero_connector/apps/cli/show_scopes.py" = ["T20"]
+# Same exemption again: list_folders.py is the ``list-folders`` renderer, split
+# out of main.py for the code-line ceiling. Its listing IS the product -- it is
+# the answer to the watcher's listing WARN (#198) -- and it is CLI-only.
+"src/inbox_zero_connector/apps/cli/list_folders.py" = ["T20"]
+# Same exemption again: diagnose.py writes the beta diagnostics zip and its
+# stdout IS the product -- the path of the file the tester attaches, plus the
+# promise about what the bundle does not contain. CLI-only; the server never
+# imports it.
+"src/inbox_zero_connector/apps/cli/diagnose.py" = ["T20"]
+# Same exemption again: voice.py is the ``voice`` show/approve/build renderer,
+# split out of main.py for the code-line ceiling. Its stdout IS the product --
+# ``show`` prints the profile the owner reads BEFORE approving it, so routing
+# that through the logger would put the thing being consented to on a sink
+# nobody is looking at. CLI-only; the server never imports it.
+"src/inbox_zero_connector/apps/cli/voice.py" = ["T20"]
+# Same exemption again: digest.py is the ``digest`` renderer, split out of
+# main.py for the code-line ceiling. The digest IS the product an operator
+# audits; CLI-only, never imported by the server process.
+"src/inbox_zero_connector/apps/cli/digest.py" = ["T20"]
+# The Microsoft consent flows print the browser prompt and the device code the
+# user must type. They are interactive-only (CLI path) and unreachable from a
+# tool call; provider.py itself no longer prints.
+"src/inbox_zero_connector/providers/outlook/consent.py" = ["T20"]
+"tests/**" = ["assert"]  # assert is the point of a test
+# A check reports to stdout -- that IS its product, the same exemption the
+# standard's own _githooks/ carries. Nothing here runs in the server process.
+"scripts/**" = ["print"]
+# The corpus generator's entire contract is a deterministically SEEDED
+# random.Random: byte-identical output at seed 20260819 is the invariant the
+# harness re-proves after every edit. S311 warns the PRNG is not
+# cryptographically secure; nothing here is secret and non-cryptographic
+# determinism is the point, not a weakness.
+"scripts/voice_corpus/generate.py" = ["suspicious-non-cryptographic-random-usage"]
+# test_standards_enforcement.py SHELLS OUT to the size check on purpose: the
+# thing under test is a script on disk, and running it is the only way to prove
+# it rejects what it claims to. The command is a FIXED LIST built from
+# sys.executable and a path this repo owns -- never a string, never a shell,
+# never user input -- so the injection risk these two rules warn about does not
+# exist here. Same exemption and same reasoning as the standard's own
+# tests/test_enforcement.py.
+"tests/test_standards_enforcement.py" = [
+    "assert",
+    "suspicious-subprocess-import",          # S404
+    "subprocess-without-shell-equals-true",  # S603
+]
+# The zip builder shells out to `git ls-files` -- a FIXED argv list, no shell,
+# no user input -- because tracked-vs-stray is the security control: building
+# from the disk walk shipped gitignored regenerables and other lanes' untracked
+# files on the first run. PATH-resolved `git` (S607) is deliberate: dev
+# machines and CI runners keep git at different absolute paths.
+"scripts/packaging/build_zips.py" = [
+    "suspicious-subprocess-import",          # S404
+    "subprocess-without-shell-equals-true",  # S603
+    "start-process-with-partial-path",       # S607
+]
+# The judge's tests SHELL OUT to the script under test, same reasoning and
+# same fixed-list shape as test_standards_enforcement.py above; `uv` is
+# PATH-resolved for the same reason git is in the builder.
+"tests/scripts/test_assert_zip.py" = [
+    "assert",
+    "suspicious-subprocess-import",          # S404
+    "subprocess-without-shell-equals-true",  # S603
+    "start-process-with-partial-path",       # S607
+]
+# The size check's own scope tests SHELL OUT to a COPY of the script placed in
+# a synthesized project tree, because its roots derive from its location on
+# disk and the exit code is only observable across the process boundary. Fixed
+# argv list from sys.executable and paths this repo owns -- no shell, no input.
+"tests/scripts/test_check_code_size_scope.py" = [
+    "assert",
+    "suspicious-subprocess-import",          # S404
+    "subprocess-without-shell-equals-true",  # S603
+]
+# The custom builder shells out to git twice for the SAME reason build_zips.py
+# does, and #145 added both: `git diff` to name the shipped members whose
+# working tree differs from HEAD, and `git show HEAD:./<path>` to read each
+# member's committed bytes so an uncommitted local edit cannot ride into a
+# client's zip. Fixed argv lists, no shell, no user input; PATH-resolved `git`
+# (S607) is deliberate for the same cross-machine reason.
+"scripts/packaging/build_custom.py" = [
+    "suspicious-subprocess-import",          # S404
+    "subprocess-without-shell-equals-true",  # S603
+    "start-process-with-partial-path",       # S607
+]
+# The docstring gate's tests run the census as a SUBPROCESS against a copied
+# tree, because its scope constant is derived from the script's own location
+# and the exit code is the whole contract the pre-commit hook consumes. Same
+# fixed-argv, no-shell shape as test_assert_zip.py above.
+"tests/scripts/test_audit_docstrings_check.py" = [
+    "assert",
+    "suspicious-subprocess-import",          # S404
+    "subprocess-without-shell-equals-true",  # S603
+]
+# The hardening suite drives the judge AND both builders as subprocesses, same
+# reasoning and same fixed-list shape as test_assert_zip.py above.
+"tests/scripts/test_packaging_hardening.py" = [
+    "assert",
+    "suspicious-subprocess-import",          # S404
+    "subprocess-without-shell-equals-true",  # S603
+    "start-process-with-partial-path",       # S607
+]
+
+[tool.ruff.lint.pylint]
+# 3, not 2: PLR1702 counts EVERY block type, so a legitimate
+# try -> for -> with is three deep with no branching. 3 still refuses
+# if-in-if-in-if, which is the actual target.
+max-nested-blocks = 3
+max-branches = 12
+# STATEMENTS, not code lines. ruff has no line-count rule at all; the 500/file
+# and 50/function CODE-line ceilings are measured by
+# scripts/check_code_size.py, which this package runs in its own suite.
+max-statements = 25
+max-args = 5
+
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_redundant_casts = true
+# Force every `# type: ignore` to name the error it silences, so a stale one
+# becomes an error instead of quietly covering a new problem.
+enable_error_code = ["ignore-without-code", "redundant-expr", "truthy-bool"]
+
+# Google's client libraries and msal ship no type stubs and no py.typed
+# marker. Narrowed to these modules so strict checking still covers all of
+# our own code; the adapters wrap every call from them in typed helpers.
+[[tool.mypy.overrides]]
+module = [
+    "googleapiclient.*",
+    "google_auth_oauthlib.*",
+    "google.oauth2.*",
+    "google.auth.*",
+    "msal.*",
+]
+ignore_missing_imports = true
+disallow_untyped_calls = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Warnings are errors, so a deprecation or a shadowed field cannot accumulate
+# unnoticed the way they do when the suite prints them and stays green.
+filterwarnings = [
+    "error",
+    # LedgerEntry.schema is the on-disk key on every v1 row already written to
+    # a real append-only ledger. Renaming the attribute would strand those
+    # receipts behind a key the reader no longer looks for; the shadowed
+    # BaseModel.schema is a deprecated v1 method this package never calls.
+    # See the class docstring in ledger.py.
+    'ignore:Field name "schema" in "LedgerEntry" shadows an attribute:UserWarning',
+]
