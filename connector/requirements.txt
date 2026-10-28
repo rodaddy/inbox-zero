@@ -13,7 +13,7 @@ attrs==26.1.0
     # via
     #   jsonschema
     #   referencing
-certifi==2026.7.22
+certifi==2026.10.18
     # via
     #   httpcore
     #   httpx
@@ -64,7 +64,7 @@ httplib2==0.32.0
     #   google-auth-httplib2
 httpx==0.28.1
     # via inbox-zero-connector
-httpx2==2.10.0
+httpx2==2.12.0
     # via mcp
 httpx2-jsfetch==1.0 ; sys_platform == 'emscripten'
     # via httpx2
@@ -90,7 +90,7 @@ jsonschema-specifications==2025.9.1
     # via jsonschema
 keyring==25.7.0
     # via inbox-zero-connector
-mcp==2.0.0
+mcp==2.2.0
     # via inbox-zero-connector
 mcp-types==2.0.0
     # via mcp
@@ -100,9 +100,9 @@ more-itertools==11.1.0
     #   jaraco-functools
 msal==1.37.0
     # via inbox-zero-connector
-oauthlib==3.3.1
+oauthlib==4.0.0
     # via requests-oauthlib
-opentelemetry-api==1.44.0
+opentelemetry-api==1.45.1
     # via mcp
 platformdirs==4.11.3
     # via inbox-zero-connector
@@ -125,7 +125,7 @@ pydantic==2.13.4
     #   mcp-types
 pydantic-core==2.46.4
     # via pydantic
-pyjwt==2.13.0
+pyjwt==2.15.0
     # via
     #   mcp
     #   msal
@@ -178,7 +178,7 @@ typing-inspection==0.4.4
     #   pydantic
 uritemplate==4.2.0
     # via google-api-python-client
-urllib3==2.7.0
+urllib3==2.8.0
     # via requests
 uvicorn==0.52.3 ; sys_platform != 'emscripten'
     # via mcp
