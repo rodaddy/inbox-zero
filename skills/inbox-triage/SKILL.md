@@ -191,7 +191,7 @@ State the honest caveat the first time it comes up in a session and not again:
 "There's nothing connected to your mail here, so nothing about your account can
 be reached. The one thing to know: what you paste goes to whatever AI you're
 using, same as anything else you type in. For everyday mail that's nothing; for
-privileged or confidential mail, which AI and which plan matters."
+confidential or regulated mail, which AI and which plan matters."
 
 Never say the pasted text stays on their machine. It does not.
 

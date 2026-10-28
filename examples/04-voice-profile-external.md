@@ -19,7 +19,7 @@ it rather than reading everything she had ever written:
 > mail describes somebody you used to be. It also means I'm reading a lot less
 > of your mail than I would otherwise."
 
-**Exclusions.** She excluded anything to her attorney and anything about staff.
+**Exclusions.** She excluded anything to her accountant and anything about staff.
 Recorded permanently; they hold on every future run.
 
 **Size, said back before anything was read:**
@@ -43,7 +43,7 @@ reviewed by owner:   yes
 reviewed on:         2026-08-17
 built on:            2026-08-17
 built from:          Sent folder, 2026-02-17 to 2026-08-17
-                     (excluded: attorney correspondence, anything about staff)
+                     (excluded: accountant correspondence, anything about staff)
 messages sampled:    58 read, 31 usable
                      (27 discarded: 14 forwards, 9 one-word replies, 4 calendar accepts)
 sign-off form:       "Thanks," on its own line, then "Priya" on the next

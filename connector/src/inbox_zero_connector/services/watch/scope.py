@@ -214,7 +214,7 @@ class MailboxScope(Section):
                 f"mailbox_scope names the same folder in both lists: {', '.join(overlap)}. "
                 "ACTION REQUIRED: put each folder in exactly one list -- a folder that "
                 "is both included and excluded has no defensible answer, and picking "
-                "one would make a privileged folder's fate depend on our tie-break "
+                "one would make a confidential folder's fate depend on our tie-break "
                 "rather than the client's instruction."
             )
         return self

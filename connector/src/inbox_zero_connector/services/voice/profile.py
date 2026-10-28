@@ -28,7 +28,7 @@ with the first one, and no place for a model to express a preference between
 profiles. The AI never chooses (``config.resolve_voice``); it does not choose
 here either.
 
-A PERSONAL voice is a row in this table like any other. Rico's ruling of
+A PERSONAL voice is a row in this table like any other. The ruling of
 2026-08-19 makes ``Personal-Action`` a drafting folder, which means personal
 mail needs a personal register or it emerges in the owner's client-facing one.
 That is served by adding ``personal`` to ``voices`` and storing its row here --

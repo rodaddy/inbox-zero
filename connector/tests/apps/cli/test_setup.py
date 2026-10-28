@@ -57,7 +57,7 @@ FULL_RUN: tuple[str, ...] = (
     "y",  # drafts on this account
     "y",  # add another mailbox?
     # Account 2: a custom domain states no provider, so the wizard ASKS.
-    "second@lawfirm.com",
+    "second@example.net",
     "google",  # provider, asked
     "",  # owner domain: accept the default taken from the address
     "",  # posture: accept the file_only default
@@ -183,7 +183,7 @@ def test_setup_writes_the_config_from_answers(
     accounts = written["accounts"]
     assert [entry["address"] for entry in accounts] == [
         "owner@outlook.com",
-        "second@lawfirm.com",
+        "second@example.net",
     ]
     # Provider INFERRED for the consumer domain, ASKED for the custom one.
     assert [entry["provider"] for entry in accounts] == ["microsoft", "google"]
@@ -191,7 +191,7 @@ def test_setup_writes_the_config_from_answers(
     assert [entry["posture"] for entry in accounts] == ["file_read_draft", "file_only"]
     assert [entry["drafts"] for entry in accounts] == [True, False]
     # The second account's owner domain came from its own address by default.
-    assert [entry["owner_domain"] for entry in accounts] == ["example.com", "lawfirm.com"]
+    assert [entry["owner_domain"] for entry in accounts] == ["example.com", "example.net"]
 
     classifier = written["classifier"]
     assert classifier["base_url"] == "http://localhost:7101/v1"

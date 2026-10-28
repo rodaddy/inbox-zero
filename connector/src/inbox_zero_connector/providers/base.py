@@ -44,7 +44,7 @@ has NO live caller outside the two adapters -- whether the watcher should tag
 instead of, or as well as, file is a product decision still open (#42).
 
 ``create_self_draft`` is the eleventh, and it exists because the daily digest
-has to REACH the owner (#65, Rico decision D10/D20 2026-09-01) and the only
+has to REACH the owner (#65, decision D10/D20 2026-09-01) and the only
 delivery channel this connector will ever own is one that cannot send. It
 writes a draft into the account's OWN mailbox with an empty To/Cc/Bcc: the
 owner opens their drafts folder and reads it. It is narrower than

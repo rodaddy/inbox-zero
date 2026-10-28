@@ -20,7 +20,7 @@ from inbox_zero_connector.services.watch.scope import MailboxScope
 from inbox_zero_connector.services.watch.state import WatchState
 
 INBOX_ID = "Label_INBOX"
-PRIVILEGED_ID = "Label_Clients"
+CONFIDENTIAL_ID = "Label_Clients"
 FINAL_CURSOR = "history-2001"
 # S105 matches the NAME "token", not the value: a continuation handle is an
 # opaque pagination cursor, not a credential. Same exemption and reasoning as
@@ -62,7 +62,7 @@ class FakeProvider(MailProvider):
                 exclusive=False,
             ),
             Container(
-                id=PRIVILEGED_ID,
+                id=CONFIDENTIAL_ID,
                 name="Client Matters",
                 well_known=None,
                 parent_id=None,

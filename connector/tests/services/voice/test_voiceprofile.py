@@ -86,7 +86,7 @@ def test_profile_round_trips_through_save_and_load(store_path: Path) -> None:
 
 
 def test_personal_voice_is_an_ordinary_row(store_path: Path, routing: VoiceRouting) -> None:
-    """Rico's R1: Personal-Action drafts, so a personal profile is a row, not a case."""
+    """Decision R1: Personal-Action drafts, so a personal profile is a row, not a case."""
     profiles = store({}, _profile("external"), now=NOW)
     profiles = store(profiles, _profile("personal"), now=NOW)
     save(profiles, store_path)
@@ -153,7 +153,7 @@ def test_get_names_the_stored_voices_when_one_is_missing() -> None:
     [
         ("greeting", "Opens with 'Hi Sam' when writing to sam@acmeparts.com."),
         ("sign_off", "Signs off to priya@example.org with one word."),
-        ("formality", "Formal with counsel (counsel@lawfirm.co.uk), casual otherwise."),
+        ("formality", "Formal with the accountant (accounts@example.co.uk), casual otherwise."),
         ("sample_summary", "31 usable, mostly to <justin@imperity.com>."),
         ("unknowns", "No angry mail in the sample; closest was ops@vendor.net."),
     ],

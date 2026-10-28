@@ -1,6 +1,6 @@
 """Tell the operator whether a newer build of THIS kit exists (#67, D13).
 
-NOTHING HERE REPLACES ANYTHING. Rico's decision D13 (2026-09-01) is a version
+NOTHING HERE REPLACES ANYTHING. Decision D13 (2026-09-01) is a version
 check plus a GUIDED update: the installed copy learns that a newer build was
 promoted and prints the one path to it, and the operator downloads and runs the
 installer themselves. A connector that rewrites its own files is a connector

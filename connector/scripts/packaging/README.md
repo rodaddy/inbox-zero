@@ -16,8 +16,8 @@ Builds the customer zips and judges them. Excluded from every shipped artifact
 
 ## Two cuts per tier
 
-D4 (Rico, 2026-09-01): `tests/` is neither always shipped nor always withheld,
-so every tier build writes both and Rico picks which one a customer receives.
+D4 (2026-09-01): `tests/` is neither always shipped nor always withheld,
+so every tier build writes both and the operator picks which one a customer receives.
 
 | artifact | `tests/` | `TESTS-NOTE.md` |
 | --- | --- | --- |

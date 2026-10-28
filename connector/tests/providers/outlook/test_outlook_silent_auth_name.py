@@ -17,7 +17,7 @@ from inbox_zero_connector.providers.outlook import reauth as outlook_reauth
 from inbox_zero_connector.providers.outlook.provider import OutlookProvider
 from inbox_zero_connector.providers.outlook.reauth import account_name
 
-BOUND_UPN = "rico@rTechDigital.onmicrosoft.com"
+BOUND_UPN = "owner@contoso.onmicrosoft.com"
 
 
 class _FakeCache:

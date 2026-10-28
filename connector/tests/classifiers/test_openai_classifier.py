@@ -244,11 +244,11 @@ def test_the_prompt_reads_the_installed_taxonomy_not_a_hardcoded_copy(
     would still emit the default nine and fail every assertion here.
     """
     custom = Taxonomy(
-        folders=("Litigation", "Filings", "Triage-Me"),
+        folders=("Projects", "Invoices-Sent", "Triage-Me"),
         descriptions={
-            "Litigation": "Active matters with a court deadline the attorney owns.",
-            "Filings": "Documents already submitted to the court. Nothing to do.",
-            "Triage-Me": "Anything this firm's classifier is not sure about.",
+            "Projects": "Active jobs with a customer deadline the owner tracks.",
+            "Invoices-Sent": "Invoices already sent to the customer. Nothing to do.",
+            "Triage-Me": "Anything this business's classifier is not sure about.",
         },
         # Every Taxonomy declares the folder that absorbs doubt, and this one
         # renames it along with everything else -- which is the point: sharing
@@ -257,8 +257,8 @@ def test_the_prompt_reads_the_installed_taxonomy_not_a_hardcoded_copy(
     )
     prompt = build_prompt(_message(), custom)
 
-    assert "Active matters with a court deadline the attorney owns." in prompt
-    assert "Documents already submitted to the court." in prompt
+    assert "Active jobs with a customer deadline the owner tracks." in prompt
+    assert "Invoices already sent to the customer." in prompt
     # And the default vocabulary must be absent -- the proof there is no copy.
     assert "Business-Waiting" not in prompt
     assert "Newsletters" not in prompt

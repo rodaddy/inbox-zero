@@ -2,7 +2,7 @@
 
 **Status: PROPOSED analysis. Nothing here is a decision.** Every claim about the
 code is WRITTEN (read from disk this session) or RUNNING (a command executed
-this session, exit code quoted). Every recommendation is PROPOSED and is Rico's
+this session, exit code quoted). Every recommendation is PROPOSED and is rTech's
 to accept or reject.
 
 Analysed at `feat/inbox-zero-voice-corpus`, working tree as of 2026-08-20.
@@ -43,7 +43,7 @@ So the correction, and it is the most consequential thing in this document:
 > planning README uses the same word for a RESTRICTED SECURITY TIER that is a
 > strict subset of that connector.**
 
-These two meanings are not compatible. Under `SPEC.md:18` the connector Rico
+These two meanings are not compatible. Under `SPEC.md:18` the connector rTech
 ships to anyone, drafting and voice included, IS the rTech Email Guardian.
 Under the internal sprint plan the Guardian is the kit that
 specifically does NOT have those things. `CAPABILITIES.md:949` says "Guardian
@@ -56,7 +56,7 @@ LLM, and a client reading the MSP pitch is told Guardian means no model touches
 their mail. Those two clients compare notes in the same procurement conversation.
 The word cannot carry both loads.
 
-**PROPOSED, Rico decides:** one of the two words moves. Either the connector's
+**PROPOSED, rTech decides:** one of the two words moves. Either the connector's
 product name changes and "Guardian" is reserved for the secure tier, or the
 secure tier gets a different name. This is a naming decision with no code in it
 and it blocks nothing, but it should be made before the word reaches a client
@@ -405,7 +405,7 @@ Extract the deterministic core to `inbox-zero-connector` and ship the AI tier as
 - Correct endpoint, wrong first move. It should not be built before a client has
   used either tier.
 
-### RECOMMENDATION — PROPOSED, for Rico's decision
+### RECOMMENDATION — PROPOSED, for rTech's decision
 
 **Ship v1 on Option A (status quo config), and spend the small budget on C's
 enforcement test rather than on A's documentation debt.** Concretely, three

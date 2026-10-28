@@ -620,7 +620,7 @@ class SalutationForm(enum.Enum):
 _MAX_SALUTATION_CHARS: Final = 60
 """A salutation is a SHORT line; past this it is a paragraph that starts with a word.
 
-"Hey Rico," is a greeting. "Hey so anyway I wanted to walk you through the
+"Hey Sam," is a greeting. "Hey so anyway I wanted to walk you through the
 whole thing..." is prose whose first word happens to be a greeting token, and
 mirroring off it would read the body as a salutation. The bound is generous --
 a real salutation is rarely past thirty characters -- because the cost of
@@ -639,7 +639,7 @@ _GREETING_WORDS: Final[dict[str, SalutationForm]] = {
 _BARE_NAME_RE: Final = re.compile(r"^[A-Z][a-z]{1,20},$")
 """A capitalised first name, a comma, and nothing else on the line.
 
-CAPITALISED IS LOAD-BEARING. Lowercase ``rico,`` is far more often a clause
+CAPITALISED IS LOAD-BEARING. Lowercase ``sam,`` is far more often a clause
 inside a sentence than a greeting, and treating it as a salutation would make
 any comma-separated line a mirror trigger. The anchors at both ends are what
 keep this to a line that is ONLY the name.

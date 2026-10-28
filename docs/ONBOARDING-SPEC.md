@@ -118,7 +118,7 @@ Concretely, it would cost:
 §1 delivers what the email was reaching for — an install that configures itself
 from the mailbox — using reads the connector is already permitted to make. If
 the self-configuration goal ever genuinely requires a send, that is a
-product-posture decision for Rico and the MSP, not an implementation detail of
+product-posture decision for rTech and the MSP, not an implementation detail of
 an installer, and it should be argued on its own rather than arriving inside an
 onboarding change.
 
@@ -1431,7 +1431,7 @@ These fail the technician test in §0. Each has a stated alternative, because
 
 | Never asked | Why it fails | What happens instead |
 | --- | --- | --- |
-| "How formal is your writing?" / "What's your tone?" | A technician cannot answer for the owner, and the owner cannot introspect it accurately either. | The `voice-profile` skill derives it from the sent sample, with a "standard business" default when the sample is too thin (SPEC.md, Rico 2026-08-18). Never an interview question. |
+| "How formal is your writing?" / "What's your tone?" | A technician cannot answer for the owner, and the owner cannot introspect it accurately either. | The `voice-profile` skill derives it from the sent sample, with a "standard business" default when the sample is too thin (SPEC.md, 2026-08-18). Never an interview question. |
 | "Which clients are most important?" | Client names in an installer prompt are confidential information entering a terminal for no operational reason. | Not modelled. Importance comes from `is_important` and the rule pass. |
 | "What are your job numbers / project codes?" | Same confidentiality problem, plus it is a taxonomy the connector deliberately does not have — `MAX_FOLDERS` is 24 (`taxonomy.py:123`) and a per-job vocabulary is unbounded. | Out of scope. The connector files by *what to do next*, not by *what it is about*. |
 | "Do you want to keep newsletters?" | A preference about the owner's reading habits. | Default is Newsletters exists and is used. Owner adjusts by re-running. |

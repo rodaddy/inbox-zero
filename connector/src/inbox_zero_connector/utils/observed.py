@@ -1,6 +1,6 @@
 """The ``logged`` flow decorator - one wrapper instead of five hand-written calls.
 
-STANDARDS-python.md "LAW: flow instrumentation is ONE decorator" (Rico,
+STANDARDS-python.md "LAW: flow instrumentation is ONE decorator" (decision,
 2026-08-19): write the logging utility once - entry at DEBUG, exit with
 duration at DEBUG, failure at ERROR with ``opt(exception=True)`` then re-raise - and
 apply it to the functions that do meaningful work, instead of hand-coding ins

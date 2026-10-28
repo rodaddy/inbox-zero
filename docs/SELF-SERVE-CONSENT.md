@@ -331,7 +331,7 @@ restricted-scope page contains **no** statement of cost or of who pays. The
 App Defense Alliance CASA pages fetched this session state the tiering is
 risk-based across AL1/AL2 and that revalidation is annual, but likewise carry
 **no cost figure**. A "$500+ per year" number surfaced only in a community
-forum summary. **Do not quote any dollar figure to Rico or to a client.** If the
+forum summary. **Do not quote any dollar figure to the operator or to a client.** If the
 assessment turns out to apply, get a written quote from an ADA-authorized
 assessor before pricing the self-serve tier.
 

@@ -13,7 +13,7 @@ refuses that config rather than running it, and ``INSTALL-RUNBOOK.md`` § 6b is
 the operator-facing statement of the same limit.
 
 WHAT IS PER ACCOUNT AND WHAT IS SHARED IS A DECISION, NOT AN OVERSIGHT
-(D11, Rico, 2026-09-01). The TAXONOMY is shared across every account on an
+(D11, 2026-09-01). The TAXONOMY is shared across every account on an
 install: it is the folder vocabulary the owner agreed to, and two mailboxes
 belonging to one person filing into two different vocabularies is a support
 call, not a feature. ``posture`` and the ``drafts`` flag are PER ACCOUNT,

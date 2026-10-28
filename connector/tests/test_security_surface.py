@@ -169,7 +169,7 @@ of addition rather than the ``tag_message`` kind:
   out-of-scope message is discarded BEFORE anything reads its content. It is
   not a no-send question, and this file's no-send invariants are unaffected.
 
-Why ``create_self_draft`` (the eleventh) is accepted (#65, Rico decision
+Why ``create_self_draft`` (the eleventh) is accepted (#65, decision
 D10/D20 2026-09-01):
 
 - IT IS THE NARROWEST DRAFT ON THIS INTERFACE. ``create_draft`` addresses a

@@ -67,7 +67,7 @@ def _no_real_notifications(monkeypatch: pytest.MonkeyPatch) -> None:
     ``services.notify.notify`` shells out to the desktop notifier, and the
     watch loop calls it on a failure streak. The loop tests drive the loop with
     failing fake providers on purpose, so the first full run after #64 landed
-    put hundreds of real "watcher still failing" banners on Rico's screen
+    put hundreds of real "watcher still failing" banners on the operator's screen
     (2026-09-01 20:15, one per test that hit the streak). The notifier is a
     process-global side effect like the loguru sinks above, so it is fenced
     here for every test rather than remembered per test. ``test_notify.py``

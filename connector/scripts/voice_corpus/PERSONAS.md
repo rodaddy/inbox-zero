@@ -30,7 +30,7 @@ What this corpus IS good for, and the only claims it may support:
    greeting extraction — ground truth is an advantage because we wrote the
    answers.
 3. **Greeting mirroring (issue #83).** This is the only corpus that will carry
-   the INBOUND half of each thread. Neither of Rico's real corpora has it, so
+   the INBOUND half of each thread. Neither of the owner's real corpora has it, so
    the mirroring rule is underivable without this.
 4. **Volume curve (issue #81).** Where a profile stabilises across
    10/25/50/75/100/200 messages. The widely-repeated "75 emails per author"
@@ -43,10 +43,10 @@ Any lane, doc, README, or report derived from this corpus repeats this warning.
 
 ## Assumption, not a ruling
 
-Rico did not rule on persona flavour. The terse/verbose opposition below is the
+The owner did not rule on persona flavour. The terse/verbose opposition below is the
 **controller's pick** for Sprint 5, recorded here as an assumption. It was chosen
 because terse-vs-verbose is separable on axes a script can count without
-judgment, which is what a falsification battery requires. If Rico later rules a
+judgment, which is what a falsification battery requires. If the owner later rules a
 different flavour, the axis table is what changes; the structure of this file is
 not affected.
 

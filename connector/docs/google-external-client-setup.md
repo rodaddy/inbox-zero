@@ -5,15 +5,15 @@ receipt.
 
 Purpose: stand up ONE rTech-owned External Google OAuth client so consumer
 @gmail.com users can run the Inbox Zero connector without each of them
-creating their own Cloud project. Decided by Rico 2026-08-23 (#117).
+creating their own Cloud project. Decided 2026-08-23 (#117).
 
 Project note: `rtech-gws-admin` is the only rTech GCP project observed, and
 it is the Workspace-admin project. Prefer a DEDICATED project such as
-`rtech-inbox-zero` unless Rico says otherwise; the 100-new-user cap in
+`rtech-inbox-zero` unless rTech says otherwise; the 100-new-user cap in
 section C is per-project and lifetime, so do not spend it on the admin
 project.
 
-## A. Rico's console steps
+## A. Operator console steps
 
 1. Create or select the project.
    https://console.cloud.google.com/projectcreate
@@ -127,6 +127,6 @@ project.
   directly fetched Google page. Unconfirmed.
 - No verified gcloud/API path exists for creating a Desktop OAuth client;
   treat step 7 as console-only.
-- Whether rTech pursues production verification at all is Rico's call and
+- Whether rTech pursues production verification at all is rTech's call and
   is not decided here.
 - No pricing, packaging, or client-facing copy is settled by this doc.

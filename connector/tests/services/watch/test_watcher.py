@@ -22,7 +22,7 @@ table can be driven with no mailbox and no clock.
 The classifier is a SPY as well as a stub. Several of these tests assert what
 it was NOT asked about, which is the only way to prove the scope gate runs
 before classification rather than after it -- the observable labelling
-behaviour is identical either way, and the difference is whether privileged
+behaviour is identical either way, and the difference is whether confidential
 mail was read.
 """
 
@@ -31,11 +31,11 @@ from __future__ import annotations
 import pytest
 
 from _watch_harness import (
+    CONFIDENTIAL_ID,
     FINAL_CURSOR,
     FOLDER,
     INBOX_ID,
     PAGE_TOKEN,
-    PRIVILEGED_ID,
     CountingClassifier,
     FakeProvider,
     _context,
@@ -189,7 +189,7 @@ def test_an_out_of_scope_message_is_never_classified() -> None:
         ChangeSet(
             messages=(
                 _message("in-scope"),
-                _message("privileged", containers=(PRIVILEGED_ID,)),
+                _message("confidential", containers=(CONFIDENTIAL_ID,)),
             ),
             cursor=FINAL_CURSOR,
         )
@@ -200,7 +200,7 @@ def test_an_out_of_scope_message_is_never_classified() -> None:
     summary = watcher.poll_once(_context(provider, scope=scope, classifier=classifier))
 
     assert classifier.seen_ids == ["in-scope"]
-    assert "privileged" not in classifier.seen_ids
+    assert "confidential" not in classifier.seen_ids
     assert provider.filed == [("in-scope", FOLDER)]
     assert [row.message_id for row in ledger.read_all()] == ["in-scope"]
     assert summary.skipped_out_of_scope == 1
@@ -210,20 +210,20 @@ def test_an_out_of_scope_message_is_never_classified() -> None:
 def test_an_out_of_scope_message_is_not_marked_seen() -> None:
     """No action occurred, so it must not spend a slot in the replay window."""
     provider = FakeProvider(
-        ChangeSet(messages=(_message("privileged", containers=(PRIVILEGED_ID,)),))
+        ChangeSet(messages=(_message("confidential", containers=(CONFIDENTIAL_ID,)),))
     )
     state = WatchState()
     scope = MailboxScope(mode="all_except", excluded_folders=("Client Matters",))
 
     watcher.poll_once(_context(provider, scope=scope, state=state, classifier=CountingClassifier()))
 
-    assert state.seen_message(None, "privileged") is False
+    assert state.seen_message(None, "confidential") is False
 
 
 def test_any_excluded_container_blocks_a_message_carrying_several() -> None:
     """Any-exclusion-wins: an in-scope label cannot outvote an excluded one."""
     provider = FakeProvider(
-        ChangeSet(messages=(_message("both", containers=(INBOX_ID, PRIVILEGED_ID)),))
+        ChangeSet(messages=(_message("both", containers=(INBOX_ID, CONFIDENTIAL_ID)),))
     )
     classifier = CountingClassifier()
     scope = MailboxScope(mode="all_except", excluded_folders=("Client Matters",))
