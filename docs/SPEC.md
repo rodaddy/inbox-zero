@@ -42,8 +42,8 @@ never send — because the send permission is never granted, at the OAuth layer.
 
 Requested by a security MSP who will dogfood it first. Built generic per
 `../KIT-STANDARD.md` like every kit; the MSP is the first buyer, not the
-customer the design is scoped to. Downstream buyers: law firms and any SMB
-with a confidentiality posture.
+customer the design is scoped to. Downstream buyers: any small or midsize
+business that handles confidential client mail.
 
 ## Decisions (Rico, 2026-08-17)
 
@@ -146,7 +146,7 @@ consent finding" below for the interactive posture that actually runs.**
    action count == ledger row count in the verify run.
 5. **Voice profile leaks nothing.** The style doc describes patterns
    (greetings, sign-offs, cadence, formality) and never quotes excerpts,
-   client names, or matter details. It is plain text the owner reads and
+   client names, or account details. It is plain text the owner reads and
    can redact before first use. Check: profile scan for verbatim n-grams
    from the sent sample.
 6. **Their tenant, their AI, their keys.** OAuth is granted in the buyer's

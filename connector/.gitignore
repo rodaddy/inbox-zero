@@ -1,6 +1,6 @@
 # uv/tooling runtime dirs. These exist by tool design inside a uv project and
 # are tolerated locally, but a TRACKED .venv or tool cache is a hard violation
-# of the repo's hidden-file law (AGENTS.md, Rico ruling 2026-08-17).
+# of the hidden-file rule.
 .venv/
 __pycache__/
 *.py[cod]

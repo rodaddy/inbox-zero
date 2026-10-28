@@ -24,7 +24,7 @@ from inbox_zero_connector.classifiers import (
 from inbox_zero_connector.config import ENV_PREFIX, load_settings, reset_settings
 
 BASE_URL = "https://gw.example.test/v1"
-MODEL_ID = "tn01-llama/qwen3-4b-instruct"
+MODEL_ID = "local-llama/qwen3-4b-instruct"
 
 
 def _configure(monkeypatch: pytest.MonkeyPatch, **overrides: str) -> Any:

@@ -6,7 +6,7 @@ need is in this directory. Do not search the internet for install steps; the
 repo says how to run itself.
 
 (If instead you are a developer agent working on this connector's SOURCE
-inside the rtech-consulting repo, the repo's own policy files govern you, not
+inside the source repository, that repository's own policy files govern you, not
 this one — this contract is for the shipped kit.)
 
 ## Your job

@@ -55,7 +55,7 @@ asked. §6 lists the ones that do not get asked.
 
 ### What the DETERMINISM-FIRST law requires here
 
-`AGENTS.md` (Rico ruling 2026-08-11): anything a script can land 100% of the
+Design rule (determinism first): anything a script can land 100% of the
 time, the script owns. Applied to an interview, this cuts in two directions and
 both matter:
 

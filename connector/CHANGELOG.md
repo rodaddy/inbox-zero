@@ -445,7 +445,7 @@ is the single construction site (None when no `base_url` -> rule-only by
 design; the backend's own `requires_key` check raises). Bifrost accepts the
 SDK's `Authorization: Bearer` header (probed live, 200 on Bearer and
 `x-bf-vk`), so no header override. Live smoke through Bifrost on
-`tn01-llama/qwen3-4b-instruct`: 3/3 sensible folders, 0.5-1.0s.
+`local-llama/qwen3-4b-instruct`: 3/3 sensible folders, 0.5-1.0s.
 RED-first: `tests/classifiers/test_factory.py`,
 `tests/apps/cli/test_watch_classifier_wiring.py`.
 
