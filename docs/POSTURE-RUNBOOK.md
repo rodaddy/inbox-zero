@@ -2,7 +2,7 @@
 
 **Audience: the MSP owner.** You are already a tenant admin for every client you
 manage, you do app registrations and consent grants routinely, and you are going
-to run this against a real law firm's tenant. This runbook assumes Entra and
+to run this against a real client's tenant. This runbook assumes Entra and
 Google Admin fluency and does not explain either. It is exact because a wrong
 permission name in a runbook gets pasted into a production tenant.
 
@@ -70,7 +70,7 @@ All permissions below are **delegated** (work or school account). Application
 (app-only) permissions grant tenant-wide mailbox access and are **never** part of
 any posture in this kit.
 
-### 2.1 READ-ONLY — the law-firm default
+### 2.1 READ-ONLY — the default for confidential mail
 
 Grant exactly:
 
@@ -173,7 +173,7 @@ permission, which is the single most commonly mis-stated fact in this area.
   outside this permission set. (Marked INFERRED-excluded and UNVERIFIED in the
   kit's own research — see `CAPABILITIES.md` §2.1.)
 
-Read §6.3 before granting this to a law firm.
+Read §6.3 before granting this to a client with confidential mail.
 
 ### 2.4 Graph permission summary
 
@@ -488,51 +488,52 @@ install notes. "Declined" is a valid recorded answer; unrecorded is not.
 
 ---
 
-## 6. Risk notes, written for a law firm
+## 6. Risk notes, written for a business with confidential client mail
 
 ### 6.1 READ-ONLY
 
 Residual risk is **confidentiality of the read itself**. The connector reads
-privileged client communications — that is the job — and forms judgments about
+confidential client communications — that is the job — and forms judgments about
 them. Nothing is written to the mailbox and nothing is transmitted to rTech;
 classifications land in a local ledger on the client's own machine. The
-questions worth pre-answering for a firm's ethics counsel: where the AI runtime
+questions worth pre-answering for the client's compliance or IT lead: where the AI runtime
 processes message content, whether that runtime's provider retains it, and
-whether the engagement covers a matter with a heightened confidentiality order.
+whether any of the mail falls under a contractual or regulatory confidentiality
+requirement.
 **Those are questions about their AI vendor, not about this connector**, and the
 connector's read-only posture does not answer them.
 
-No risk of mail movement, alteration, or exfiltration. For most firms this is the
+No risk of mail movement, alteration, or exfiltration. For most businesses this is the
 posture to start in and stay in for the first engagement.
 
 ### 6.2 STANDARD
 
 Two real risks, neither catastrophic:
 
-- **Misfiling.** A message filed into the wrong folder is a message the attorney
+- **Misfiling.** A message filed into the wrong folder is a message the owner
   does not see when they expect to. Mitigation is the closed taxonomy, the
   ledger, and undo — every filing is recorded and reversible, and the first
-  supervised sweep is run on the firm's own mail with the operator watching.
+  supervised sweep is run on the client's own mail with the operator watching.
 - **Draft content leaking into a send by human error.** The connector cannot
-  send, but a person can. A draft that misstates a matter fact and gets sent by a
-  hurried associate is a real professional-responsibility exposure. The kit's
+  send, but a person can. A draft that misstates a fact and gets sent by a
+  hurried colleague is a real business exposure. The kit's
   missing-fact refusal exists for this: it stops and asks rather than inventing a
-  number. Tell the firm the drafts are a starting point requiring attorney
-  review, because that is both true and the standard they are already held to.
+  number. Tell the client the drafts are a starting point that a person reviews
+  before sending, because that is true.
 
-`Mail.ReadWrite` is whole-mailbox. If the firm has matters requiring hard
+`Mail.ReadWrite` is whole-mailbox. If the client has mail requiring hard
 segregation, the answer is a separate mailbox, not a permission — Graph offers no
 folder-scoped alternative.
 
-### 6.3 FULL — read this before granting it to a law firm
+### 6.3 FULL — read this before granting it
 
 **Forwarding is the highest exfiltration risk in the entire capability set, and
-it is not close.** A forward moves privileged client mail *out of the mailbox* to
+it is not close.** A forward moves confidential client mail *out of the mailbox* to
 an arbitrary external address in a single API call. Filing is reversible;
 drafting is inert; a forward is neither. Once it is delivered, it is gone —
-outside the firm's custody, outside their retention policy, and outside any undo
-this connector could offer. For a firm with a duty of confidentiality to every
-client on that mail server, an automated forward capability is a categorically
+outside the client's custody, outside their retention policy, and outside any undo
+this connector could offer. For a business with a duty of confidentiality to every
+customer on that mail server, an automated forward capability is a categorically
 different thing from an automated filing capability, and it should be presented
 that way rather than as one more item on a feature list.
 
@@ -575,16 +576,16 @@ placement. Nothing of theirs is overwritten and the quota is untouched.
 
 | Client type | Posture | Why |
 | --- | --- | --- |
-| **Law firm, any size** | **READ-ONLY** for the first engagement | Privileged mail. Prove the classification is right before it touches anything. Nothing leaves, nothing changes, and the ethics conversation stays short. |
-| **Law firm, after a clean supervised run** | **STANDARD** | Filing and drafts with an attorney sending. On Graph this is scope-layer — Microsoft refuses send, not us. This is where most firms should land permanently. |
-| **Law firm** | **Never FULL** | Forwarding moves privileged mail out of the firm's custody irreversibly (§6.3). If a firm asks for it, that is a conversation about who is accountable, not a config change. |
+| **Business with confidential client mail, any size** | **READ-ONLY** for the first engagement | Confidential mail. Prove the classification is right before it touches anything. Nothing leaves, nothing changes, and the compliance conversation stays short. |
+| **Same, after a clean supervised run** | **STANDARD** | Filing and drafts with a person sending. On Graph this is scope-layer — Microsoft refuses send, not us. This is where most of these clients should land permanently. |
+| **Same** | **Never FULL** | Forwarding moves confidential mail out of the client's custody irreversibly (§6.3). If a client asks for it, that is a conversation about who is accountable, not a config change. |
 | **Medical, financial, or any regulated SMB** | **READ-ONLY → STANDARD** | Same reasoning. Regulated data plus irreversible egress is not a trade worth the time saved. |
 | **Agency, marketing, sales-led SMB** | **FULL** | Outbound volume is the actual job, forwarding is routine, and an errant forward is an embarrassment rather than a breach. This is what FULL is for. |
 | **Any client, Gmail, wanting drafts** | **STANDARD (interactive), stated as code-layer** | Gmail sells no draft-without-send scope. Say "code-layer" out loud and apply the App access control in §5.4. Do not let it be heard as the Microsoft guarantee. |
 | **Any client whose security team asks first** | **READ-ONLY**, then widen on evidence | The negative check in §4.3 is a better sales artifact than any capability list. Widening after a clean receipt is an easy conversation; narrowing after an incident is not. |
 
 **The opinionated version, in one line:** default to READ-ONLY, earn STANDARD,
-and treat FULL as a posture for clients whose mail is not privileged.
+and treat FULL as a posture for clients whose mail is not confidential.
 
 ---
 

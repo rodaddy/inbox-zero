@@ -14,8 +14,8 @@ WHY THE WHOLE DANCE IS NECESSARY (verified live 2026-08-18, real tenant)
 
 A ``PATCH`` of ``categories`` REPLACES the collection. Writing ``["B"]`` onto
 a message carrying ``["A"]`` answers ``200 OK`` and ``A`` is GONE -- silently,
-with no error to catch. In a law firm's mailbox those labels can carry matter,
-client, or privilege meaning, so a naive write is real data loss with no
+with no error to catch. In a business mailbox those labels can carry case,
+client, or confidentiality meaning, so a naive write is real data loss with no
 signal. Adding one category therefore means: read the current set, union ours
 in, write the FULL set back.
 

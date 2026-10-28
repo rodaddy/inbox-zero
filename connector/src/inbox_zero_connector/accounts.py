@@ -84,7 +84,7 @@ def infer_provider(address: str) -> str | None:
         ``"google"``, ``"microsoft"``, or ``None``.
 
     ``None`` IS A REAL ANSWER, not a failure. A custom domain
-    (``someone@lawfirm.com``) is served by Google Workspace, Microsoft 365, or
+    (``someone@example-business.com``) is served by Google Workspace, Microsoft 365, or
     neither, and the address cannot distinguish them. Returning a guess would
     open the wrong consent screen and fail at sign-in with nothing pointing at
     the cause; returning ``None`` makes the wizard ask one extra question in

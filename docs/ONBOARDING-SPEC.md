@@ -27,7 +27,7 @@ command line. `init-taxonomy` (`cli.py:135`) writes nine hardcoded folder names
 from `taxonomy.py:28` with no reference to what the mailbox already contains.
 
 The consequence: **every install is byte-identical and none is tuned.** A
-40-attorney firm with an existing `Action/`, `Waiting/`, `Clients/` structure
+40-person firm with an existing `Action/`, `Waiting/`, `Clients/` structure
 gets nine new folders bolted alongside the ones they already use, and the
 classifier files into the new ones while the humans keep looking in the old
 ones. That is not a configuration gap, it is the failure mode that makes an
@@ -36,7 +36,7 @@ at the message level (`taxonomy.py:89`), reproduced at the install level.
 
 ### Who is at the keyboard
 
-The buyer is an MSP serving law firms and financial agencies. **The person
+The buyer is an MSP serving small and midsize businesses. **The person
 running `setup` is frequently an MSP technician, not the mailbox owner.** This
 single fact constrains the entire question set:
 
@@ -77,7 +77,7 @@ both matter:
 The interview does not open with blank questions. **A read-only profiling pass
 runs first (§1), and every question it can pre-answer arrives as a proposal the
 human confirms or overrides (§3).** "You have 34 folders; these 6 look like
-matter files — exclude them?" is a question a technician can answer in two
+client files — exclude them?" is a question a technician can answer in two
 seconds. "Which folders should be excluded?" is one they cannot answer at all.
 
 This is the determinism law applied to the interview itself: the mailbox knows
@@ -225,19 +225,19 @@ fixed keyword set: `action`, `todo`, `to do`, `waiting`, `pending`, `follow up`,
 `followup`, `reference`, `ref`, `reading`, `receipts`, `invoices`, `billing`,
 `newsletters`, `subscriptions`, `junk`/`spam` handled separately.
 *Wrong when:* a firm has a client named "Action Plumbing", or uses `Billing` as
-a matter folder rather than a receipts folder.
+a client folder rather than a receipts folder.
 *Confidence shown:* the folder's message count and last activity are printed
 beside the proposal, which is usually enough for a human to see the error.
 
-**H2 — Folders that look like matter files or archives (propose EXCLUDING).**
+**H2 — Folders that look like client files or archives (propose EXCLUDING).**
 A top-level folder is proposed for exclusion when **any** of:
 - it has **more than 5 subfolders** and its subfolder names are mostly distinct
-  proper nouns or contain digits (matter-number shape: `2024-0412`,
+  proper nouns or contain digits (job-number shape: `2024-0412`,
   `Vance-Carter`) — the client-file pattern;
 - its name matches `archive`, `old`, `20\d\d`, `closed`, `former`;
 - its **last activity is older than 180 days** while its message count is
   greater than 100 — a settled store, not a working folder.
-*Wrong when:* a firm keeps active matters in a folder that looks archival, or
+*Wrong when:* a firm keeps active jobs in a folder that looks archival, or
 files current work under a year name.
 *Presentation:* proposed for exclusion, shown with counts and last-activity
 dates, one keystroke to keep any of them. **Exclusion is the narrower outcome,
@@ -609,17 +609,17 @@ an administrative mailbox on a different domain from the users it serves.
 can answer this from memory, and a technician certainly cannot.
 
 **Pre-answered by the profiler (H2).** When the profile ran cleanly, the prompt
-is not "which folders?" — it is "these look like matter files; exclude them?",
+is not "which folders?" — it is "these look like client files; exclude them?",
 with the evidence that produced the guess:
 
 ```
 This mailbox has 34 top-level folders, 61 including subfolders.
 
-Six of them look like matter files or archives. Proposed: EXCLUDE.
+Six of them look like client files or archives. Proposed: EXCLUDE.
 
                         messages   last activity   why
-   Clients                  4,182   2 days ago     14 subfolders, matter-number shape
-   Matters                  2,940   1 day ago      12 subfolders, matter-number shape
+   Clients                  4,182   2 days ago     14 subfolders, job-number shape
+   Jobs                     2,940   1 day ago      12 subfolders, job-number shape
    Archive                  9,610   8 months ago   name matches 'archive'
    2023                     1,205   14 months ago  name matches a year
    2022                     1,890   26 months ago  name matches a year
@@ -648,12 +648,12 @@ This mailbox has 34 top-level folders:
    1  Inbox                      (2 subfolders)
    2  Archive
    3  Clients                    (18 subfolders)
-   4  Matters                    (12 subfolders)
+   4  Jobs                       (12 subfolders)
    5  Action
    6  Waiting
    7  Admin
    8  Billing
-   9  Conflicts
+   9  Closed-Jobs
   10  Deleted Items
   ... 24 more.  Type 'more' to page, 'all' to print the full tree.
 
@@ -676,7 +676,7 @@ Choice [1]:
 - **If skipped:** Inbox only. Rationale: it is the narrowest scope that still
   makes the product do its job, and it is the scope where a wrong answer is
   cheapest to correct. Widening later via a re-run (§5) is safe; narrowing after
-  the connector has already filed mail out of `Clients/Vance-Matter-3` is a
+  the connector has already filed mail out of `Clients/Vance-Job-3` is a
   cleanup job for a human.
 
 **Presenting a large tree without flooding the terminal.** The rules:
@@ -767,7 +767,7 @@ This mailbox has 8,412 messages in the Inbox and 61% are unread, at about
 47 a day. Recommended: folder moves -- the Inbox is where the problem is.
 
 You already have 6 Outlook categories, 3 of them in use:
-    Client (143 of 500 sampled)   Matter (88)   Intake (12)
+    Client (143 of 500 sampled)   Job (88)   Intake (12)
     Q3-Push (0)   Old-Import (0)   Temp (0)
 If you choose categories, the connector extends that vocabulary rather
 than replacing it.
@@ -803,7 +803,7 @@ Choice [1]:
 
 **Why categories is the default despite folder moves being the headline
 feature.** The product's promise is inbox zero, which categories alone do not
-deliver. But the first install on a real attorney's mailbox is the moment the
+deliver. But the first install on a real client's mailbox is the moment the
 system is least trusted and most likely to be misconfigured, and a wrong
 category is a tag to delete while a wrong move is mail the owner cannot find.
 The prompt says "recommended for the first 30 days" and §5's re-run path makes
@@ -975,7 +975,7 @@ Choice [u]:
 
 **Why `unknown` is a first-class answer and the default.** A technician who
 guesses `no` on an owner's mailbox causes personal mail to be classified as
-business and filed where a paralegal may be looking. A technician who answers
+business and filed where a colleague may be looking. A technician who answers
 `unknown` gets both folder sets, and the cost is two folders that may stay
 empty. Asymmetric cost, so the default is the harmless side. An interview that
 forces a binary where the honest answer is "I don't know" manufactures a
@@ -1118,7 +1118,7 @@ The voice routing sends replies on labelled threads to a 'sales' register
 instead of the general external one. Which labels or categories on this
 mailbox mean 'sales'?  (comma-separated, or Enter for none)
 
-Labels seen on recent threads: Client, Matter, Intake, Referral, Vendor
+Labels seen on recent threads: Client, Job, Intake, Referral, Vendor
 
 Labels []:
 ```
@@ -1131,9 +1131,9 @@ Labels []:
   `config.py:861`, which is a complete and safe behaviour.
 
 The observed-labels line is detection, not a suggestion: it lists what exists
-so the technician recognises the vocabulary, and suggests nothing. On a law
-firm mailbox the honest answer is usually "none" — firms do not have a sales
-register — and the prompt must not push toward a non-empty answer.
+so the technician recognises the vocabulary, and suggests nothing. On a
+professional-services mailbox the honest answer is often "none" — many such
+firms have no sales register — and the prompt must not push toward a non-empty answer.
 
 ---
 
@@ -1148,10 +1148,10 @@ These senders write often and the owner has never once replied to them,
 across 500 sent messages over the last year:
 
                                       messages   ever replied
-    news@legaltechweekly.example            84   no
+    news@industryweekly.example            84   no
     updates@barassociation.example          61   no
     marketing@casewareplus.example          47   no
-    noreply@docketalerts.example            39   no
+    noreply@tenderalerts.example            39   no
     events@lipracticegroup.example          22   no
 
 Proposed: file mail from these senders as Not-Interested by default.
@@ -1260,8 +1260,8 @@ SAMPLE CLASSIFICATION (50 messages)
   Five examples, one per folder:
     Business-Action     "Re: Vance/Carter -- signature needed by Friday"
     Business-Waiting    "Re: records request -- awaiting county response"
-    Receipts            "Your Westlaw invoice for August"
-    Not-Interested      "Legal tech webinar: 5 AI trends for 2027"
+    Receipts            "Your Xero invoice for August"
+    Not-Interested      "Industry tech webinar: 5 AI trends for 2027"
     Review              "Fwd: (no subject)"
 
 REVIEW FOLDER
@@ -1433,7 +1433,7 @@ These fail the technician test in §0. Each has a stated alternative, because
 | --- | --- | --- |
 | "How formal is your writing?" / "What's your tone?" | A technician cannot answer for the owner, and the owner cannot introspect it accurately either. | The `voice-profile` skill derives it from the sent sample, with a "standard business" default when the sample is too thin (SPEC.md, Rico 2026-08-18). Never an interview question. |
 | "Which clients are most important?" | Client names in an installer prompt are confidential information entering a terminal for no operational reason. | Not modelled. Importance comes from `is_important` and the rule pass. |
-| "What are your matter numbers / case codes?" | Same confidentiality problem, plus it is a taxonomy the connector deliberately does not have — `MAX_FOLDERS` is 24 (`taxonomy.py:123`) and a per-matter vocabulary is unbounded. | Out of scope. The connector files by *what to do next*, not by *what it is about*. |
+| "What are your job numbers / project codes?" | Same confidentiality problem, plus it is a taxonomy the connector deliberately does not have — `MAX_FOLDERS` is 24 (`taxonomy.py:123`) and a per-job vocabulary is unbounded. | Out of scope. The connector files by *what to do next*, not by *what it is about*. |
 | "Do you want to keep newsletters?" | A preference about the owner's reading habits. | Default is Newsletters exists and is used. Owner adjusts by re-running. |
 | "How aggressive should classification be?" | Not a dial that exists. There is no confidence threshold to tune; uncertainty goes to `Review` by construction (`classify.py`, `taxonomy.py:89`). Offering the dial would imply a control the code does not have. | Nothing. `Review` is the mechanism. |
 | "Should the AI be allowed to send?" | It cannot, at any setting. There is no send code path (`providers/base.py`). A question implying otherwise is a false claim about the product's central guarantee. | Never asked. §3 Q7 asks about *drafts*, which is a real switch. |
@@ -1458,7 +1458,7 @@ a consumer should have been cut.
 
 ## 7. Worked transcript
 
-A realistic end-to-end session. Law firm mailbox, Microsoft 365, MSP technician
+A realistic end-to-end session. Professional-services firm mailbox, Microsoft 365, MSP technician
 at the keyboard, existing folder structure. Technician input is on `>` lines.
 
 Every number, folder name, and subject line below is **invented for
@@ -1518,12 +1518,12 @@ Everything below is a PROPOSAL. Nothing is applied until you confirm.
 
 This mailbox has 12 top-level folders, 31 including subfolders.
 
-Three of them look like matter files or archives. Proposed: EXCLUDE.
+Three of them look like client files or archives. Proposed: EXCLUDE.
 
                         messages   last activity   why
-   Clients                  4,182   2 days ago     14 subfolders, matter-number shape
+   Clients                  4,182   2 days ago     14 subfolders, job-number shape
    Archive                  9,610   8 months ago   name matches 'archive'
-   Conflicts                  190   today          name matches 'closed'/'conflicts'
+   Closed-Jobs                190   today          name matches 'closed'
                                                    (recent activity -- less certain)
 
 These are proposals from folder names, counts, and dates -- not from reading
@@ -1568,7 +1568,7 @@ This mailbox has 8,412 messages in the Inbox and 61% are unread, at about
 47 a day. Recommended: folder moves -- the Inbox is where the problem is.
 
 You already have 6 Outlook categories, 3 of them in use:
-    Client (143 of 500 sampled)   Matter (88)   Intake (12)
+    Client (143 of 500 sampled)   Job (88)   Intake (12)
     Q3-Push (0)   Old-Import (0)   Temp (0)
 If you choose categories, the connector extends that vocabulary rather
 than replacing it.
@@ -1757,7 +1757,7 @@ The voice routing sends replies on labelled threads to a 'sales' register
 instead of the general external one. Which labels or categories on this
 mailbox mean 'sales'?  (comma-separated, or Enter for none)
 
-Labels seen on recent threads: Client, Matter, Intake, Referral, Vendor
+Labels seen on recent threads: Client, Job, Intake, Referral, Vendor
 
 Labels []:
 > 
@@ -1772,10 +1772,10 @@ These senders write often and the owner has never once replied to them,
 across 500 sent messages over the last year:
 
                                       messages   ever replied
-    news@legaltechweekly.example            84   no
+    news@industryweekly.example            84   no
     updates@barassociation.example          61   no
     marketing@casewareplus.example          47   no
-    noreply@docketalerts.example            39   no
+    noreply@tenderalerts.example            39   no
     events@lipracticegroup.example          22   no
 
 Proposed: file mail from these senders as Not-Interested by default.
@@ -1790,10 +1790,10 @@ Choice [1]:
 > 2
 
 Which ones?  (comma-separated numbers, or 'none')
-   1 news@legaltechweekly.example
+   1 news@industryweekly.example
    2 updates@barassociation.example
    3 marketing@casewareplus.example
-   4 noreply@docketalerts.example
+   4 noreply@tenderalerts.example
    5 events@lipracticegroup.example
 > 1,3,4
 
@@ -1843,13 +1843,13 @@ SAMPLE CLASSIFICATION (50 messages)
   Five examples, one per folder:
     Action              "Re: Vance/Carter -- signature needed by Friday"
     Waiting             "Re: records request -- awaiting county response"
-    Billing             "Your Westlaw invoice for August"
-    Not-Interested      "Legal tech webinar: 5 AI trends for 2027"
+    Billing             "Your Xero invoice for August"
+    Not-Interested      "Industry tech webinar: 5 AI trends for 2027"
     Review              "Fwd: (no subject)"
 
 NEVER-ANSWERED SENDER RULE (3 senders)
-  news@legaltechweekly.example, marketing@casewareplus.example,
-  noreply@docketalerts.example  ->  Not-Interested
+  news@industryweekly.example, marketing@casewareplus.example,
+  noreply@tenderalerts.example  ->  Not-Interested
   6 of the 50 sampled messages matched this rule.
 
 REVIEW FOLDER

@@ -133,6 +133,16 @@ contact rico@rtech-consulting.com.
 - `examples/`: five worked examples on invented data
 - `tiers/`: what each build tier contains
 
+## How it was built
+
+The kit was specified and its first connector built on 2026-08-17, with a
+scripted no-send check written to fail first. Six review rounds with
+different reviewer roles followed the same day, then a watcher, packaging,
+pilot installs and a voice stage through September 2026. The test suite grew
+from 84 to 2,718 tests, and a live token-expiry soak was turned into an
+in-process test that runs on every build. The full account is in
+[docs/BUILD-STORY.md](docs/BUILD-STORY.md).
+
 ## Project status
 
 Active, beta. Connector version 0.2.15. Proven against live mailboxes: Gmail

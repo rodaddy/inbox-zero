@@ -104,7 +104,7 @@ rather than trusting each one individually.
 **Read that as a warning, not a convenience.** If the client's domain has
 **Trust internal apps** ticked, then trusting this connector is not a decision
 anyone made about this connector — every internal OAuth client in the
-organization inherits the same trust. On a law-firm install, prefer configuring
+organization inherits the same trust. On an install for a client with confidential mail, prefer configuring
 this specific app explicitly (§4.2) over relying on a blanket internal-app trust,
 and *check which one is in force* before claiming the app is scoped.
 
@@ -277,7 +277,7 @@ filters in Gmail"* — is the filters scope. ([Gmail API scopes][g-scopes])
 - **Cannot reach mailboxes outside the grant** — under interactive, the one
   signed-in user; under DWD, whatever impersonation the admin permitted (§3.2).
 
-Read §3.4 before granting FULL to a law firm.
+Read §3.4 before granting FULL to a client with confidential mail.
 
 ---
 
@@ -358,7 +358,7 @@ not the default. It gets argued for, in writing, or it does not happen.
 > means accepting a wider impersonation surface. That is a genuine trade, not a
 > free upgrade, and a buyer who is told only the first half has been sold badly.
 
-### 3.4 Recommendation for a law firm
+### 3.4 Recommendation for a business with confidential client mail
 
 **Recommend Shape A — per-user OAuth — and specifically READ-ONLY first, then
 STANDARD (interactive) once the firm trusts the classifications.** Do not default
@@ -366,20 +366,20 @@ to DWD.
 
 The argument, in the order it should be made to a firm:
 
-1. **Consent is evidence, and law firms run on evidence.** Under Shape A every
+1. **Consent is evidence, and confidential work runs on evidence.** Under Shape A every
    mailbox the software touched has a human who agreed to it. Under DWD there is
    a service account that could reach every mailbox and no per-mailbox record of
-   agreement. When the firm's own client asks who could read the matter file,
-   "each attorney authorized it individually" is a better answer than "one key
+   agreement. When the firm's own client asks who could read their file,
+   "each person authorized it individually" is a better answer than "one key
    could read all of it."
-2. **Confidentiality is per-matter, and DWD is per-domain.** A firm's ethical
-   walls are between people. A domain-wide grant is structurally the wrong shape
+2. **Confidentiality is per-client, and DWD is per-domain.** A firm's
+   confidentiality boundaries are between people. A domain-wide grant is structurally the wrong shape
    for an organization whose defining control is that some people must not see
    some mail.
-3. **Blast radius on compromise.** The operator's laptop holding one attorney's
+3. **Blast radius on compromise.** The operator's laptop holding one employee's
    token is a bad day. The same laptop holding a DWD service-account key is
-   every mailbox in the firm, including the managing partner's.
-4. **Google recommends against it.** Point 3.3 at the firm's IT counsel. "The
+   every mailbox in the firm, including the owner's.
+4. **Google recommends against it.** Point 3.3 at the firm's IT lead. "The
    vendor said no" is weaker than "Google says avoid this unless you have a
    critical business case," and the firm's own security reviewer will find that
    page.

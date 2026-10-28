@@ -31,7 +31,7 @@ class PlannedFiling(BaseModel):
     """One filing a DRY round decided on and deliberately did not perform.
 
     IDENTIFIERS ONLY, AND THAT IS THE SAME SECURITY PROPERTY ``RoundSummary``
-    ENFORCES. A subject or sender field here would put privileged mail on a
+    ENFORCES. A subject or sender field here would put confidential mail on a
     screen and in a paste buffer -- the identical leak the logging rule closes,
     arriving through stdout instead. There is no field on this model that can
     hold message text, and the folder name is the operator's OWN taxonomy

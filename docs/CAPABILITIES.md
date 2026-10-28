@@ -1,7 +1,7 @@
 # Inbox Zero Connector — Capability Map and Coexistence
 
 **Audience:** the MSP owner or senior engineer evaluating whether this thing can be
-deployed into a mailbox that already has fifteen years of rules, a matter-numbered
+deployed into a mailbox that already has fifteen years of rules, a client-numbered
 folder tree, and possibly a Copilot licence, without breaking any of it.
 
 **What this document is.** An inventory of what the connector can do, how each
@@ -105,7 +105,7 @@ warns explicitly against extracting or manipulating `$skip`.
   code by `parentFolderId` even if reachable — classifying the user's own half-written
   drafts is noise.
 - Cannot read attachment **contents**. The provider projects headers and body, not
-  parsed PDFs or DOCX. For a law firm whose substance is routinely in the attachment,
+  parsed PDFs or DOCX. For a business whose substance is routinely in the attachment,
   this is a stated gap. The audit-brief notes native rules cannot do this either
   (`HasAttachment` is boolean) — so this is unclaimed ground for everyone, not a
   weakness relative to what the client has.
@@ -145,7 +145,7 @@ already knows about — reversible, and receipted either way.
   unpaid invoice as a receipt is how a firm misses a payable.
 - Produces a probabilistic answer. The `Review` folder exists precisely because the
   classifier can be unsure, and the audit-brief calls that the honest safety valve
-  that makes any auto-action defensible in a law firm.
+  that makes any auto-action defensible in a business with real deadlines.
 
 **Where this capability is genuinely unserved by anything native:** the
 Business-Action / Business-Waiting split. The audit-brief calls it "the strongest no in
@@ -232,8 +232,8 @@ new id.
 **What it cannot do — and why this capability should be treated as opt-in, not default:**
 
 The audit-brief is direct about the risk: *"Auto-filing out of the Inbox creates a
-missed-deadline liability in a law firm. A misfiled Business-Action is a
-malpractice-adjacent event, not a UX annoyance. Categories or a Review-first posture
+missed-deadline liability in any business with real deadlines. A misfiled
+Business-Action is a business risk, not a UX annoyance. Categories or a Review-first posture
 are the safer defaults; silent moves are the dangerous one."*
 
 Independently, the rules-brief reaches the same conclusion from the API side: a move
@@ -332,7 +332,7 @@ The watch-brief settles this before any code:
 
 - A change-notification endpoint **must be publicly reachable HTTPS**, stated twice in
   consecutive paragraphs, and *"if your endpoint isn't publicly accessible, Microsoft
-  Graph doesn't send notifications"* (DOCUMENTED). An MSP's law-firm clients sit behind
+  Graph doesn't send notifications"* (DOCUMENTED). An MSP's small-business clients sit behind
   NAT with no inbound ports — the correct configuration for that customer, not a
   deficiency to engineer around. A push tier cannot run *at the client* at all.
 - The push failure mode is silent and permanent. An endpoint whose responses exceed the
@@ -390,8 +390,8 @@ delta poll is ~10 requests per 10 minutes.
   heuristic (server rules fire at delivery within seconds; humans file minutes-to-days
   later) — and the second is explicitly a heuristic that must not be load-bearing for
   anything that mutates the mailbox.
-- N delta streams means N independent failure modes. A large firm mailbox with a deep
-  matter tree could be hundreds of folders, each with a token that can be evicted
+- N delta streams means N independent failure modes. A large business mailbox with a deep
+  client-folder tree could be hundreds of folders, each with a token that can be evicted
   independently. That is real operational weight for an MSP across many tenants.
 
 ### 2.8 Onboard / profile a mailbox
@@ -459,7 +459,7 @@ Action/Waiting distinction — that no condition in that surface can express.
 
 **How the two coexist.** Perfectly, in a categories-only design, because the two write
 to orthogonal properties. Their rules own `parentFolderId`. We own `categories`. A firm
-with fifteen years of rules and a matter-numbered folder tree keeps every bit of it.
+with fifteen years of rules and a client-numbered folder tree keeps every bit of it.
 Better than neutral coexistence: our category is **rule-able by them** — `AnyCategory`
 and `AssignedCategories` are real conditions, so the client can write their own rule
 that acts on our classification. That is the determinism-first composition running in
@@ -664,7 +664,7 @@ Same orthogonality as with the client's own rules — a message in `SaneLater` c
    signals the research was not done.
 4. **Do not assert compliance conclusions.** Any third-party AI triage for these buyers
    raises automated-processing-of-personal-data questions and data-residency questions.
-   Which specific obligations bind a US law firm is **UNVERIFIED** and per repo policy
+   Which specific obligations bind a given US business is **UNVERIFIED** and per repo policy
    requires fresh sourcing.
 
 *(Two competitor readings conflict and neither should be repeated as fact: Clean Email's
@@ -675,7 +675,7 @@ UNVERIFIED in the audit-brief.)*
 
 ### 3.9 The client's own hand-built folder tree
 
-**What it does.** Whatever the firm decided over fifteen years — matter numbers, client
+**What it does.** Whatever the firm decided over fifteen years — client numbers, client
 names, year buckets, arbitrary nesting with no documented depth cap.
 
 **What we do that is different.** Nothing about placement. We do not have an opinion on
@@ -830,7 +830,7 @@ This is a fixed cost of the MSP topology, not a choice between architectures:
   administrator consent** (DOCUMENTED). *"If your application requests an app-only
   permission and a user tries to sign in, an error message is displayed saying the user
   isn't able to consent."*
-- A tenant admin can **disable user consent entirely**. Law firms are exactly the
+- A tenant admin can **disable user consent entirely**. Businesses that handle confidential client data are exactly the
   population likely to have this locked down. **Design for admin-consent-only as the
   baseline, not the exception.**
 - Consent is **revocable at any time** via Enterprise applications → Permissions.
@@ -943,7 +943,7 @@ will.
 ### 6.9 A webhook / push tier, for now
 
 Deferred, not refused — see §2.7. It requires either a public HTTPS endpoint the MSP
-hosts (a new internet-facing attack surface in the delivery path of privileged client
+hosts (a new internet-facing attack surface in the delivery path of confidential client
 mail metadata) or Azure Event Hubs (an Azure subscription, a broker, per-tenant
 plumbing). Delta work is not thrown away when push arrives: Microsoft's own recommended
 architecture is push-as-trigger, delta-as-state, so the Guardian tier becomes a latency

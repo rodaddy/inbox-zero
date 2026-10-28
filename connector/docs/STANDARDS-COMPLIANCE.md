@@ -443,10 +443,10 @@ the log line rather than the code that emitted it. So:
 **SATISFIED — and this is the row an auditor should press hardest on, so it has
 two independent mechanisms and a test that has been proven to fail.**
 
-This connector reads a lawyer's mailbox. A log file is a second copy of whatever
+This connector reads a business owner's mailbox. A log file is a second copy of whatever
 it records, in a place with different permissions, a different lifetime, and a
 different backup policy than the mailbox — so logging one subject line silently
-creates an unmanaged copy of privileged material.
+creates an unmanaged copy of confidential material.
 
 **Mechanism 1 — the API only accepts identifiers.** `ProviderCall` and `ToolCall`
 take `**fields` rendered as `key=value`, and every call site passes ids, counts,
