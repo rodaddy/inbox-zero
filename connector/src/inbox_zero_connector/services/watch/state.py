@@ -20,8 +20,8 @@ WHY POLLING AND NOT WEBHOOKS
     reasoning holds on both providers. Microsoft Graph states twice that a
     change-notification endpoint must be publicly reachable HTTPS, and that it
     does not deliver otherwise; Gmail's push tier needs a Cloud Pub/Sub
-    subscription reaching an endpoint the same way. The buyer's clients are law
-    firms behind NAT with no inbound ports -- which is the correct
+    subscription reaching an endpoint the same way. The buyer's clients are small
+    businesses behind NAT with no inbound ports -- which is the correct
     configuration for that customer, not a deficiency to engineer around. A
     push tier therefore cannot run at the client at all.
 

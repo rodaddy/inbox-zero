@@ -172,7 +172,7 @@ def test_default_scope_is_keyword_only_and_returns_independent_objects() -> None
 
     ``names_encode_nesting`` is keyword-only on purpose: a bare positional bool
     at a call site reads as nothing at all, and this is the field that decides
-    whether an exclusion reaches a privileged child.
+    whether an exclusion reaches a confidential child.
     """
     assert default_scope() == default_scope()
     assert default_scope() is not default_scope()

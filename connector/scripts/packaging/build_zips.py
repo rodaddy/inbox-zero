@@ -35,12 +35,12 @@ WHY THE RULES ARE DATA
     by hand is what makes the receipt checkable by someone who was not there.
 
 WHY EACH TIER PRODUCES TWO CUTS
-    D4 (Rico, 2026-09-01) ruled that ``tests/`` is neither always shipped nor
+    D4 (2026-09-01) ruled that ``tests/`` is neither always shipped nor
     always withheld: some customers want the suite they can run, and some
     reviewers read the draft/voice fixture strings under ``tests/`` as product
     behaviour. Deciding it once in ``tiers.json`` would pick wrong for one of
     them, so every tier build writes BOTH -- ``...-<version>.zip`` without the
-    suite and ``...-<version>-with-tests.zip`` with it -- and Rico picks which
+    suite and ``...-<version>-with-tests.zip`` with it -- and the operator picks which
     one a given customer receives. The with-tests cut carries a generated
     ``TESTS-NOTE.md`` at its root saying the fixtures are fixtures, because the
     person who opens the zip is not the person who was told.
@@ -275,8 +275,8 @@ def _members_for(rules: dict, tier_name: str, *, with_tests: bool = True) -> lis
     """Sorted arcnames that survive ``never_ship``, the tier, and the cut.
 
     The ``with_tests`` cut is the tier as declared; the without-tests cut is
-    the same tier minus ``tests/``. Two cuts per tier is D4 (2026-09-01): Rico
-    picks which one a given customer receives, so the build produces both
+    the same tier minus ``tests/``. Two cuts per tier is D4 (2026-09-01): the
+    operator picks which one a given customer receives, so the build produces both
     rather than the packaging manifest deciding for every customer at once.
     """
     tier = rules["tiers"][tier_name]

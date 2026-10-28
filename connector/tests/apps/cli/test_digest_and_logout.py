@@ -11,7 +11,7 @@ either needed changing:
   next command after it is an interactive browser consent, so the cost is real
   and the operator gets no chance to notice they named the wrong provider.
 
-``digest --as-draft`` (#65, Rico decision D10/D20) is the one HAPPY-path arm
+``digest --as-draft`` (#65, decision D10/D20) is the one HAPPY-path arm
 here, and it is tested for the same reason: its failure mode is silent success.
 A run that prints the digest and creates no draft looks identical to one that
 delivered, so the assertions are on the provider CALL -- subject, body, and the

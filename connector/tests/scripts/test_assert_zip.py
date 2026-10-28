@@ -13,7 +13,7 @@ anything, so every violation class here gets its own zip.
 
 Two rulings are asserted through the ``never_ship`` list rather than restated:
 internal process files (``_DOCS/``, ``HANDOFF-RULES.md``, ``GOTCHAS*``,
-``_graph/``) never enter a shipped zip (Rico, 2026-08-21), and the real
+``_graph/``) never enter a shipped zip (decision, 2026-08-21), and the real
 ``secrets/config.json`` never ships at all.
 
 The judge is driven as a SUBPROCESS rather than imported. ``scripts/`` is not

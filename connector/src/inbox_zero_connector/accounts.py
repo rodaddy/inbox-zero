@@ -13,7 +13,7 @@ refuses that config rather than running it, and ``INSTALL-RUNBOOK.md`` § 6b is
 the operator-facing statement of the same limit.
 
 WHAT IS PER ACCOUNT AND WHAT IS SHARED IS A DECISION, NOT AN OVERSIGHT
-(D11, Rico, 2026-09-01). The TAXONOMY is shared across every account on an
+(D11, 2026-09-01). The TAXONOMY is shared across every account on an
 install: it is the folder vocabulary the owner agreed to, and two mailboxes
 belonging to one person filing into two different vocabularies is a support
 call, not a feature. ``posture`` and the ``drafts`` flag are PER ACCOUNT,
@@ -84,7 +84,7 @@ def infer_provider(address: str) -> str | None:
         ``"google"``, ``"microsoft"``, or ``None``.
 
     ``None`` IS A REAL ANSWER, not a failure. A custom domain
-    (``someone@lawfirm.com``) is served by Google Workspace, Microsoft 365, or
+    (``someone@example-business.com``) is served by Google Workspace, Microsoft 365, or
     neither, and the address cannot distinguish them. Returning a guess would
     open the wrong consent screen and fail at sign-in with nothing pointing at
     the cause; returning ``None`` makes the wizard ask one extra question in

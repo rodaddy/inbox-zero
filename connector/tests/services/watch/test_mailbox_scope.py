@@ -7,7 +7,7 @@ answered once at install time and a script honours it forever.
 
 The failure this file exists to prevent is silent: a scope rule that misses
 because of capitalisation, or an empty exclusion list that quietly reads as
-"everything", puts privileged mail into a summary with no error anywhere.
+"everything", puts confidential mail into a summary with no error anywhere.
 
 SHAPE OF THIS FILE. Scope resolution is a nearly-pure function of (mode, lists,
 flags, folder name), so the cases are a TABLE and they are written as one. A
@@ -220,7 +220,7 @@ def test_the_system_booleans_are_independent_and_outrank_the_mode() -> None:
 # THE DEFECT THESE EXIST TO PREVENT. Gmail's Label resource carries no parent
 # field, so `Clients/Smith` is an independent label that whole-name matching
 # treats as unrelated to `Clients`. A firm excludes `Clients` because its
-# contents are privileged; every matter label underneath it was read anyway,
+# contents are confidential; every matter label underneath it was read anyway,
 # with no error and no log line.
 #
 # The rule is THE PARENT'S ANSWER GOVERNS THE SUBTREE, in both directions, and
@@ -298,7 +298,7 @@ def test_nesting_governs_the_subtree_only_when_names_encode_it(
 # The rule is ANY-EXCLUSION-WINS. If ANY container is out of scope the message
 # is out of scope: no number of in-scope labels outvotes one out-of-scope one.
 # The rejected alternative, any-inclusion-wins, reads exactly the mail a client
-# asked us to stay out of -- because privileged mail arrives as a matter email
+# asked us to stay out of -- because confidential mail arrives as a matter email
 # that ALSO carries a benign label.
 # ---------------------------------------------------------------------------
 
@@ -448,7 +448,7 @@ def test_a_single_element_sequence_matches_the_single_name_answer() -> None:
             id="list-one-over-the-cap",
         ),
         # A folder in both lists has no defensible answer, and a tie-break
-        # would make a privileged folder's fate ours rather than the client's.
+        # would make a confidential folder's fate ours rather than the client's.
         pytest.param(
             {
                 "mode": "only_listed",
@@ -507,7 +507,7 @@ def test_the_model_is_frozen() -> None:
 #
 # ``names_encode_nesting`` defaults to False on the model so an upgrade cannot
 # change what any install reads. Left at that default on Gmail, though, the
-# original defect survives untouched: an exclusion naming a privileged parent
+# original defect survives untouched: an exclusion naming a confidential parent
 # label reads every matter beneath it, because Gmail's Label resource has no
 # parent and the slash is display convention. These tests are what makes the
 # Gmail install arrive with the flag ON, and -- just as importantly -- what

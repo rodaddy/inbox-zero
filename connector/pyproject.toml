@@ -1,7 +1,7 @@
 [project]
 name = "inbox-zero-connector"
 version = "0.2.15"
-license = { text = "All rights reserved" }
+license = { text = "PolyForm-Noncommercial-1.0.0" }
 description = "rTech mailroom MCP connector: least-privilege read/file/flag/draft access to Gmail and Microsoft Graph mailboxes. Stage 2 (triage, voice, reply drafts). No send code path."
 requires-python = ">=3.14"
 dependencies = [

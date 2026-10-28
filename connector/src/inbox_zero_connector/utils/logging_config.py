@@ -32,10 +32,10 @@ the server loop.
 NEVER LOG A MESSAGE BODY, SUBJECT, ADDRESS, OR TOKEN
 =============================================================================
 
-This connector reads a lawyer's mailbox. A log file is a second copy of
+This connector reads a business owner's mailbox. A log file is a second copy of
 whatever it records, in a place with different permissions, a different
 lifetime, and a different backup policy than the mailbox -- so logging one
-subject line silently creates an unmanaged copy of privileged material. The
+subject line silently creates an unmanaged copy of confidential material. The
 observability standard's "never log secrets or private content" is therefore
 not advisory here; it is the same confidentiality promise the kit is sold on.
 

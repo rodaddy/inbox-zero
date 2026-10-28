@@ -1,6 +1,6 @@
 """The measurement core: stripping, detection, segmentation, and the tally.
 
-Determinism-first (Rico, 2026-08-11): this is a script, not a model. Same
+Determinism-first (decision, 2026-08-11): this is a script, not a model. Same
 input, same numbers, always. It contains no judgment and no model call.
 
 THE BATTERY IS NINE MEASURES ACROSS EIGHT AXES: 1, 2, 3, 4, 5, 6, 7, 9a, 9b.

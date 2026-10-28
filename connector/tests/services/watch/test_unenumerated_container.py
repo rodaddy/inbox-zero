@@ -28,7 +28,7 @@ from collections.abc import Iterator
 import pytest
 from loguru import logger
 
-from _watch_harness import INBOX_ID, PRIVILEGED_ID, FakeProvider, _context, _message
+from _watch_harness import CONFIDENTIAL_ID, INBOX_ID, FakeProvider, _context, _message
 from inbox_zero_connector.apps.cli import list_folders as list_folders_cli
 from inbox_zero_connector.apps.cli import main as cli
 from inbox_zero_connector.providers.base import ChangeSet, Container
@@ -92,7 +92,7 @@ def test_mail_in_an_unlisted_container_is_not_counted_out_of_scope() -> None:
 def test_an_excluded_container_is_still_counted_out_of_scope() -> None:
     """The scope genuinely refusing a LISTED folder keeps the existing count."""
     provider = FakeProvider(
-        ChangeSet(messages=[_message("m-1", containers=(PRIVILEGED_ID,))], cursor="history-1")
+        ChangeSet(messages=[_message("m-1", containers=(CONFIDENTIAL_ID,))], cursor="history-1")
     )
     context = _context(
         provider,
@@ -188,8 +188,8 @@ def test_a_listed_container_is_reported_uncovered_when_the_scope_excludes_it(
     assert cli.main(["list-folders"]) == 0
 
     out = capsys.readouterr().out
-    privileged_line = next(line for line in out.splitlines() if PRIVILEGED_ID in line)
-    assert "NOT covered" in privileged_line
+    confidential_line = next(line for line in out.splitlines() if CONFIDENTIAL_ID in line)
+    assert "NOT covered" in confidential_line
 
 
 def test_the_unlisted_container_is_absent_from_the_fake_listing() -> None:

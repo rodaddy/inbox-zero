@@ -4,7 +4,7 @@
 
 The decision layer - which folder, and how that answer improves.
 
-Rules before model (Rico ruling 2026-08-19): deterministic rules are the
+Rules before model (design rule): deterministic rules are the
 engine, the classifier is the fallback, and Review is the honest home for
 what neither can place. Corrections the owner makes become learned rules
 that fire BEFORE the model on the next round.

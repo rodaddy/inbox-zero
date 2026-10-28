@@ -103,8 +103,8 @@ than too familiar with a stranger.
 and ``covers`` is the only place that question is answered. It exists because
 Inbox-only watching is wrong in a real tenant (server-side Exchange rules move
 mail out of Inbox before we see it) and because widening it without a client's
-explicit exclusions is worse: shared mailboxes, matter files, and privileged
-material are folders a law firm needs to be able to say NEVER about.
+explicit exclusions is worse: shared mailboxes, client files, and confidential
+material are folders a business needs to be able to say NEVER about.
 
 The default is ``inbox_only``, which is the behaviour every install already
 has, so an upgrade cannot widen what a deployment reads without a human

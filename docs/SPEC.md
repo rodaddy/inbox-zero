@@ -1,20 +1,20 @@
 # Inbox Zero Kit — Spec
 
 **Status: Stage 1 and Stage 2 WRITTEN; 499 tests, ruff, mypy strict,
-no-send check. GMAIL LIVE-VERIFIED 2026-08-18 on rico@rtech-consulting.com
+no-send check. GMAIL LIVE-VERIFIED 2026-08-18 on the operator's own Workspace account
 (operator-authorized): interactive OAuth, list/thread reads, sent sample
 (10 real messages), file_message + label auto-create, set_important both
 ways, create_draft on a real external thread — and the empty-recipient
 refusal proven live on a self-only thread. Microsoft still fully mocked.
 NOT shipped: no clean-room install test, unreleased per D3.**
 
-**Voice default (Rico, 2026-08-18): the voice-profile skill ships a
+**Voice default (decision, 2026-08-18): the voice-profile skill ships a
 "standard business" default voice.** When the sent sample is too thin to
 derive patterns (low-volume senders are normal), drafts use a clean
 professional register instead of a badly-fitted imitation; the owner can
 re-run the profile later as their sent folder grows.
 
-**Naming (Rico, 2026-08-17): the kit is "Inbox Zero"; the connector's
+**Naming (decision, 2026-08-17): the kit is "Inbox Zero"; the connector's
 product name is the "rTech Email Guardian".** The Guardian is the audited
 component and is shared by future email-family SKUs (candidate 9 guarded
 send). Technical identifiers stay `inbox-zero-connector` until the Guardian
@@ -42,10 +42,10 @@ never send — because the send permission is never granted, at the OAuth layer.
 
 Requested by a security MSP who will dogfood it first. Built generic per
 `../KIT-STANDARD.md` like every kit; the MSP is the first buyer, not the
-customer the design is scoped to. Downstream buyers: law firms and any SMB
-with a confidentiality posture.
+customer the design is scoped to. Downstream buyers: any small or midsize
+business that handles confidential client mail.
 
-## Decisions (Rico, 2026-08-17)
+## Decisions (decision, 2026-08-17)
 
 - **D1 — Connector strategy:** rTech ships its own least-privilege MCP
   connector as the preferred lane; installer detection falls back to the
@@ -146,7 +146,7 @@ consent finding" below for the interactive posture that actually runs.**
    action count == ledger row count in the verify run.
 5. **Voice profile leaks nothing.** The style doc describes patterns
    (greetings, sign-offs, cadence, formality) and never quotes excerpts,
-   client names, or matter details. It is plain text the owner reads and
+   client names, or account details. It is plain text the owner reads and
    can redact before first use. Check: profile scan for verbatim n-grams
    from the sent sample.
 6. **Their tenant, their AI, their keys.** OAuth is granted in the buyer's
@@ -158,7 +158,7 @@ consent finding" below for the interactive posture that actually runs.**
    the sender (extend-not-replace law: the owner gets their inbox time
    back; nobody is replaced as the correspondent).
 
-## Graph adapter hardening — borrow the approach, not the tree (Rico, 2026-08-17)
+## Graph adapter hardening — borrow the approach, not the tree (decision, 2026-08-17)
 
 **Status: DECIDED, not yet built. Scheduled after the review loop reaches a
 clean round.**
@@ -243,7 +243,7 @@ an auditor searching Microsoft's own docs for `mailFolders` or
 
 **Status: proven live on a real consent screen; code reworked same night.**
 
-First real Google consent attempt (rico@rtech-consulting.com, reused
+First real Google consent attempt (the operator's own Workspace account, reused
 internal Desktop client) was refused with `Error 400: invalid_scope` on
 `gmail.modify.restricted`. Google's users.messages.modify reference
 documents that scope solely for service accounts with domain-wide
@@ -269,9 +269,9 @@ reversibly. Microsoft remains fully mocked -- personal-account app
 registration is closed off without a paid signup; enterprise validation
 routes through Founders Hub or the MSP's tenant.
 
-## Assisted-install model (Rico, 2026-08-17)
+## Assisted-install model (decision, 2026-08-17)
 
-The connector lane is NOT a noob self-install: a technical operator (Rico
+The connector lane is NOT a noob self-install: a technical operator (rTech
 or equivalent) assists every lane-1 deployment. Consequences:
 
 - **Gmail uses the DWD path by design.** Service account + domain-wide
@@ -315,7 +315,7 @@ recorded at install like the image lane.
 - **Stage 2 — Voice + drafts.** `read_sent_sample` + voice-profile skill
   (invariant 5) + draft-replies skill + `create_draft`.
 
-  Voice design (Rico, 2026-08-17):
+  Voice design (decision, 2026-08-17):
   - **Selected sources, not scraped.** At setup the owner SELECTS what
     feeds each voice — folders/labels, a date range, or hand-picked
     threads — plus explicit exclusions. `read_sent_sample` takes that

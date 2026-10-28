@@ -6,7 +6,7 @@ has been reproduced against a real M365 or Workspace tenant, and several finding
 say explicitly that a live test is the only way to close them.
 
 **Audience:** the operator deciding what to fix before the next paying install, and
-the person who has to answer a law firm's IT director without guessing.
+the person who has to answer a client's IT director without guessing.
 
 **Why this document exists.** A prior round of blockers surfaced late — tenant
 consent policy killing self-serve M365 install, Google Testing-status tokens
@@ -19,7 +19,7 @@ source rather than its documentation.
 
 **The four buyers**, referenced throughout by number:
 
-1. **MSP** — manages many law-firm M365 tenants
+1. **MSP** — manages many small-business M365 tenants
 2. **M365 owner-admin** — self-managed single tenant
 3. **Workspace admin** — Google Workspace tenant
 4. **Consumer** — `@gmail.com`, no admin
@@ -37,7 +37,7 @@ source rather than its documentation.
 | 2 | "Every mutation is reversible" is false, and it is written into the product | all | `DOC-FIX` |
 | 3 | The MSP story does not exist in code — one token slot per provider | 1 | `CODE-FIX` |
 | 4 | Outlook `poll_changes` is unimplemented; the watcher is unreachable | 1,2 | `CODE-FIX` |
-| 5 | Public-client device-flow auth forfeits the CA protection a law firm triggers | 1,2 | `CODE-FIX` |
+| 5 | Public-client device-flow auth forfeits the CA protection a security-conscious tenant triggers | 1,2 | `CODE-FIX` |
 | 6 | No CAE claims-challenge handling — the connector dies on an opaque 401 | 1,2 | `CODE-FIX` |
 | 7 | Graph mutable IDs: no `ImmutableId` header, and `/move` re-IDs the message | 1,2 | `CODE-FIX` |
 | 8 | Shared mailboxes are architecturally impossible in the current code | 1,2 | `CODE-FIX` |
@@ -96,8 +96,8 @@ The bad news: `file_message` is a live MCP tool at `server.py:654`, described at
 exactly the destructive thing
 the watcher refuses to do, and nothing warns anyone.
 
-**Cost if found late:** a law firm discovers the connector shortened retention on
-client-matter mail. That is not a bug report, it is a professional-responsibility
+**Cost if found late:** a business discovers the connector shortened retention on
+client mail it is required to keep. That is not a bug report, it is a compliance
 incident and an MSP-relationship-ending event.
 
 **Fix:** (a) `DOC-FIX` — state plainly that categorize-in-place is retention-neutral and
@@ -163,7 +163,7 @@ deployment unit is one mailbox per host/user profile, and that must be said in w
 `CODE-FIX` · Buyers 1, 2
 
 **What we did not ask:** whether the unattended product runs at all on the platform most
-law firms use.
+small businesses use.
 
 `outlook.py:1013-1016` raises: *"Outlook poll_changes needs one delta stream per in-scope
 folder (Graph has no mailbox-wide delta). Use Gmail for now."* So **the watcher does not
@@ -189,11 +189,11 @@ Gmail-only and manual-invocation-only.
 
 ---
 
-## 5. Public-client device flow forfeits the one CA protection a law firm triggers
+## 5. Public-client device flow forfeits the one CA protection a security-conscious tenant triggers
 
 `CODE-FIX` · Buyers 1, 2
 
-**What we did not ask:** whether our auth client type survives a law firm's Conditional
+**What we did not ask:** whether our auth client type survives a strict Conditional
 Access posture.
 
 `outlook.py:527` constructs `msal.PublicClientApplication`, and `outlook.py:596` uses
@@ -339,8 +339,8 @@ Three further constraints worth knowing before building it:
 against a shared mailbox with `.Shared` scopes. Microsoft documents only **GET** operations
 on that page.
 
-**Cost if found late:** shared intake mailboxes are the single most obvious law-firm use
-case. Failing on one looks like a bug, not a boundary.
+**Cost if found late:** shared intake mailboxes (info@, support@, orders@) are the single
+most obvious small-business use case. Failing on one looks like a bug, not a boundary.
 
 ---
 
@@ -391,7 +391,7 @@ a deal, get it from a Workspace reseller in writing rather than from more search
 
 `CODE-FIX` · Buyers 1, 2
 
-**What we did not ask:** what a matter-numbered folder tree does to folder resolution.
+**What we did not ask:** what a per-client or per-project folder tree does to folder resolution.
 
 `outlook.py:970-971` resolves folders with a single
 `GET /me/mailFolders?$top=MAX_PAGE_SIZE` where `MAX_PAGE_SIZE = 200`
@@ -404,7 +404,7 @@ exists past the page boundary. The name-keyed `_folder_cache` (`outlook.py:967`)
 invalidation, so a folder renamed in Outlook mid-session resolves to a stale entry for the
 life of the process.
 
-A law firm with per-matter folders is the expected case, not the edge case.
+A business with a folder per client or per project is the expected case, not the edge case.
 
 **Contrast, and this one is genuinely fine:** Gmail's `users.labels.list` returns every
 label flat in one response with no pagination by API design (`gmail.py:409-411`), so the
@@ -501,7 +501,7 @@ Auto-expanding archiving additionally creates subfolders named
 
 So a message the connector tracked can vanish from its addressable surface, with a changed
 ID, because of a retention tag — and per finding 1, the connector's own move can be what
-selects the DPT that triggers it. Law firms archive aggressively, which makes this a
+selects the DPT that triggers it. Businesses with retention obligations archive aggressively, which makes this a
 first-order constraint rather than an edge case.
 
 **Fix:** disclose. This one is unfixable; the mitigation is finding 1's — prefer
@@ -645,7 +645,7 @@ Stated so nobody re-investigates them:
   comfortably exceeds `BOOTSTRAP_LIMIT = 50`, so a cold start cannot overflow it.
 - **What leaves the mailbox for classification is bounded.** `openai_compatible.py:381-383`
   sends sender, subject, and a snippet capped at 500 characters
-  (`openai_compatible.py:247`); message bodies are never sent. For a law-firm
+  (`openai_compatible.py:247`); message bodies are never sent. For a client
   confidentiality conversation this is the strongest thing the product has, and it is real.
 - **Litigation hold does not block anything the connector does, and moving/categorizing does
   not disturb eDiscovery.** Copy-on-write for messages is triggered only by *Subject, Body,

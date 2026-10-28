@@ -77,7 +77,7 @@ Pattern/Convention:
     relocated helpers; the directory is the home for what every module touches,
     not only the helpers that needed moving first.
 
-    THE PROMOTION LADDER (Rico, 2026-08-20) decides WHICH floor a helper
+    THE PROMOTION LADDER (decision, 2026-08-20) decides WHICH floor a helper
     lands on, and this package is the top rung, not the default one:
 
         1. used by ONE module            -> stays beside its caller

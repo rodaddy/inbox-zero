@@ -25,7 +25,7 @@ WHY THE RULES ARE DATA
     and nothing about WHICH paths matter.
 
 WHAT IT CHECKS, IN ORDER
-    1. ``never_ship`` -- refused in every tier. Encodes the Rico 2026-08-21
+    1. ``never_ship`` -- refused in every tier. Encodes the 2026-08-21
        ruling that internal process files (``_DOCS/``, ``HANDOFF-RULES.md``,
        ``GOTCHAS*``, ``_graph/``, ``_reports/``) never enter a shipped zip, plus
        build residue (``__pycache__``, tool caches) and the real

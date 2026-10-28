@@ -100,7 +100,7 @@ def _provider_error(response: httpx.Response, method: str, path: str) -> Provide
     bound is not redaction. This adapter POSTs the owner's draft as
     ``{"comment": body}``; Graph, a proxy, or a WAF in front of either echoes
     rejected request content back in the error payload as a matter of routine.
-    Copying even 300 characters of that into a ``ProviderError`` put privileged
+    Copying even 300 characters of that into a ``ProviderError`` put confidential
     mail into an exception that ``ProviderCall`` logs with ``opt(exception=True)`` --
     every sink, on disk, past the mailbox's own retention. A subject line and
     the opening of a body fit inside 300 characters comfortably, so the bound

@@ -37,7 +37,7 @@ from inbox_zero_connector.config import config_path, default_config, load_settin
         # A custom domain is served by Google Workspace, Microsoft 365, or
         # neither, and the address cannot tell them apart. None is the honest
         # answer and it is what makes the wizard ask.
-        ("partner@lawfirm.com", None),
+        ("partner@example.com", None),
         ("", None),
     ],
 )
@@ -57,9 +57,9 @@ def test_accounts_round_trip_through_the_installed_config() -> None:
     """
     accounts = (
         AccountSettings(
-            address="owner@lawfirm.com",
+            address="owner@example.com",
             provider="microsoft",
-            owner_domain="lawfirm.com",
+            owner_domain="example.com",
             posture="file_read_draft",
             drafts=True,
         ),
@@ -76,7 +76,7 @@ def test_accounts_round_trip_through_the_installed_config() -> None:
     # The key really is on disk, not merely in the object we handed over.
     payload = json.loads(written.read_text(encoding="utf-8"))
     assert [entry["address"] for entry in payload["accounts"]] == [
-        "owner@lawfirm.com",
+        "owner@example.com",
         "owner@gmail.com",
     ]
 
@@ -87,7 +87,7 @@ def test_accounts_round_trip_through_the_installed_config() -> None:
 
     first, second = loaded.accounts
     # Order preserved: the first entry is the install's default account.
-    assert first.address == "owner@lawfirm.com"
+    assert first.address == "owner@example.com"
     assert first.provider == "microsoft"
     assert first.posture == "file_read_draft"
     assert first.drafts is True

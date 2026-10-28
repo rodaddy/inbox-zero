@@ -99,7 +99,7 @@ being built. One run per voice.
   what the profile rests on.
 
 
-## Thin-sample fallback: the standard business voice (Rico, 2026-08-18)
+## Thin-sample fallback: the standard business voice (decision, 2026-08-18)
 
 If the selected sent sample is too small to support real pattern claims
 (fewer than ~10 substantive messages, or the interview finds no consistent

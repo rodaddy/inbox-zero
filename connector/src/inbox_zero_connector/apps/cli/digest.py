@@ -10,7 +10,7 @@ Its stdout IS its product. A digest cannot be delivered through the logger,
 which writes to sinks, and it never runs in the server process, so nothing it
 prints can reach the MCP protocol channel.
 
-``--as-draft`` is the DELIVERY arm (#65, Rico decision D10/D20 2026-09-01): the
+``--as-draft`` is the DELIVERY arm (#65, decision D10/D20 2026-09-01): the
 same rendered text, put into the account's own drafts folder through
 ``provider.create_self_draft``, which has no recipient parameter and cannot
 send. A terminal the owner is not looking at is not delivery, and every other

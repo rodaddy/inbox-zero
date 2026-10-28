@@ -24,9 +24,9 @@ because the destination is stdout rather than a log sink.
 from __future__ import annotations
 
 from _watch_harness import (
+    CONFIDENTIAL_ID,
     FOLDER,
     INBOX_ID,
-    PRIVILEGED_ID,
     CountingClassifier,
     FakeProvider,
     _context,
@@ -170,7 +170,7 @@ def test_the_scope_gate_still_precedes_classification_on_a_dry_round() -> None:
         ChangeSet(
             messages=[
                 _message("m-in", containers=(INBOX_ID,)),
-                _message("m-out", containers=(PRIVILEGED_ID,)),
+                _message("m-out", containers=(CONFIDENTIAL_ID,)),
             ],
             cursor="history-2001",
         )

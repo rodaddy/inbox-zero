@@ -20,7 +20,7 @@ These are decided. Reopening any of them is scope creep, not diligence.
 
 | Fact | Where it was settled |
 | --- | --- |
-| Trigger is **delta polling, not webhooks**. A law firm behind NAT has no publicly reachable HTTPS endpoint, and Graph states twice it does not deliver without one. Dropped push notifications "can't be recovered." Gmail's `users.watch` needs Cloud Pub/Sub and a reachable endpoint too — polling is right on **both**. | `graph-watch-brief.md` §4a, §3; `provider-parity-audit.md:223-233`; restated `watchstate.py:24-49` |
+| Trigger is **delta polling, not webhooks**. A small office behind NAT has no publicly reachable HTTPS endpoint, and Graph states twice it does not deliver without one. Dropped push notifications "can't be recovered." Gmail's `users.watch` needs Cloud Pub/Sub and a reachable endpoint too — polling is right on **both**. | `graph-watch-brief.md` §4a, §3; `provider-parity-audit.md:223-233`; restated `watchstate.py:24-49` |
 | Graph has **no mailbox-wide delta**. `/me/messages/delta` is not documented and does not exist; coverage costs N per-folder streams and N independently-evicting tokens. Gmail has **one** mailbox-wide `historyId`. | `rules-interop-brief.md:168-204`; `provider-parity-audit.md:366` |
 | `WatchCursor` already models both shapes: opaque `token`, `container_id: str \| None`. Gmail stores one row with `None`; Graph stores N. | `watchstate.py` `WatchCursor.container_id` |
 | Graph reports a **move as `@removed` / `reason: deleted`**, byte-identical to a real delete. "Delta tracking operates at the collection level, not the message level." No correlation id, no ordering guarantee. DOCUMENTED impossible at the API. | `rules-interop-brief.md:250-293` |
@@ -292,8 +292,8 @@ still does not close the window.
 This ordering is the whole point and it is not a performance preference. Classification
 means **reading the message** — `classify` consumes subject, sender, and snippet, all of
 which are message content. A pipeline that classifies first and filters second has
-already read the privileged mail; the discard afterwards deletes a variable, not the
-read. For a mailbox that may hold attorney-client material, the read is the event the
+already read the excluded mail; the discard afterwards deletes a variable, not the
+read. For a mailbox that may hold confidential client material, the read is the event the
 client cares about, and it cannot be taken back.
 
 Therefore the per-message order is fixed: **decode → scope → replay → classify → write
@@ -315,7 +315,7 @@ Precise behaviour for an excluded message:
 `covers_all`'s any-exclusion-wins rule and its empty-sequence-is-not-covered rule
 (`mailboxscope.py` `covers_all`) are inherited whole. The loop does not re-derive scope
 from `MailboxScope`'s raw fields anywhere — "a second implementation of this decision is
-a second chance to read a privileged folder" (`mailboxscope.py` `covers`).
+a second chance to read an excluded folder" (`mailboxscope.py` `covers`).
 
 > **Known gap, inherited and not solved here: nested-label exclusion on Gmail.**
 > Excluding `Clients` on Graph excludes the whole subtree, because Graph folders
@@ -371,7 +371,7 @@ except PreconditionFailed:
 
 Dropping `If-Match` to force a write past a 412 is never correct
 (`if-match-live-test.md:317-320`). Three lost races means a human is actively editing
-that message; deferring to them is the right outcome for a law firm mailbox.
+that message; deferring to them is the right outcome for any shared business mailbox.
 
 **Why a ledger failure aborts the whole round when nothing else does.** The ledger is
 the kit's evidence. A mutation that reached the mailbox with no durable receipt breaks

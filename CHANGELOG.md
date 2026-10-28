@@ -247,7 +247,7 @@ Stage 2 material as WRITTEN, not RUNNING.
 
 **Stage 1 of 2 (triage). WRITTEN, not installed, not tested, not for sale.**
 
-Per Rico's ruling 2026-08-17 (docs/SPEC.md decision D3), this kit ships only when
+Per the ruling of 2026-08-17 (docs/SPEC.md decision D3), this kit ships only when
 Stage 2 — voice profile and reply drafts — is also complete and both stages have
 passed a clean-room install test. There is no partial release. A 0.x version
 number is the record of that: this package exists to be dogfooded and beaten on,

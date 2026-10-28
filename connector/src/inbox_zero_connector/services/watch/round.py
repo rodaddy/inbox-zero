@@ -320,7 +320,7 @@ class RoundSummary(BaseModel):
 
     Also never classified, and refused for the same safety reason -- an
     unreadable placement is indistinguishable from an excluded one, and only
-    one of the two mistakes reads privileged mail. Counted SEPARATELY because
+    one of the two mistakes reads confidential mail. Counted SEPARATELY because
     the operator's fix is different: nothing in the scope section is wrong, and
     ``list-folders`` is the command that shows what the connector can actually
     enumerate.
@@ -570,7 +570,7 @@ class RoundContext(BaseModel):
     WHAT IT SKIPS IS THE WRITE, NOT THE READ, AND NOT THE GATES. The scope gate
     still refuses out-of-scope mail before ``classify`` sees it -- a preview
     buys no permission the real pass does not have, and the read is the event a
-    privileged mailbox's owner cares about. The replay guard still suppresses
+    confidential mailbox's owner cares about. The replay guard still suppresses
     what an earlier round already handled. What a dry round does not do is
     reach ``_apply`` at all: no ``file_message``, no write-ahead intent, no
     ledger receipt, no trace row, no replay mark, and -- the one that is easy
@@ -1148,7 +1148,7 @@ def _process_message(
     SCOPE PRECEDES CLASSIFY AND THE ORDER IS NOT NEGOTIABLE. ``classify``
     consumes subject, sender, and snippet, all of which are message content,
     so an out-of-scope message that reached the classifier has already been
-    read -- and for a mailbox that may hold privileged material the read is
+    read -- and for a mailbox that may hold confidential material the read is
     the event the client cares about, and it cannot be taken back. Filtering
     afterwards discards a variable, not the read.
 
@@ -1615,7 +1615,7 @@ def _covered(
     Graph the message carries exactly one, so the same call is the same
     question with one element. Scope is never re-derived from
     ``MailboxScope``'s raw fields here: a second implementation of that
-    decision is a second chance to read a privileged folder.
+    decision is a second chance to read a confidential folder.
 
     AN ID THE PROVIDER DID NOT ENUMERATE REFUSES THE MESSAGE OUTRIGHT, and
     that is a correction rather than a caution. The id used to resolve to
@@ -1627,7 +1627,7 @@ def _covered(
     since is ordinary provider behaviour, so the gap is not exotic. The right
     answer to "I cannot tell where this message is" is not permission: an
     unreadable placement and an excluded one are indistinguishable from here,
-    and only one of the two mistakes reads privileged mail.
+    and only one of the two mistakes reads confidential mail.
 
     IT IS A DIFFERENT ANSWER, THOUGH, AND THAT IS #198. The two refusals used
     to return the same ``False`` and were counted in one bucket, so a round
@@ -1688,7 +1688,7 @@ def _folder_names(message: Message, containers: dict[str, Container]) -> str:
     diagnostics, written only for a message already admitted -- so the honest
     report of an unresolved id is the id, and falling back to it costs no
     access. A reporting fallback and a permission fallback are different
-    things and only one of them can read privileged mail.
+    things and only one of them can read confidential mail.
     """
     known = [containers.get(identifier) for identifier in message.containers]
     return ",".join(

@@ -448,11 +448,11 @@ def test_the_module_reaches_no_provider_and_contains_no_send_verb() -> None:
 def test_each_salutation_form_is_classified() -> None:
     """One inbound shape per form. The enum is the whole output."""
     cases = {
-        "Hey Rico,\n\nCan you look at this?": drafting.SalutationForm.HEY,
-        "Hi Rico,\n\nCan you look at this?": drafting.SalutationForm.HI,
-        "Hello Rico,\n\nCan you look at this?": drafting.SalutationForm.HELLO,
-        "Dear Mr. Rojas,\n\nPlease find attached.": drafting.SalutationForm.DEAR,
-        "Rico,\n\nQuick question.": drafting.SalutationForm.BARE_NAME,
+        "Hey Sam,\n\nCan you look at this?": drafting.SalutationForm.HEY,
+        "Hi Sam,\n\nCan you look at this?": drafting.SalutationForm.HI,
+        "Hello Sam,\n\nCan you look at this?": drafting.SalutationForm.HELLO,
+        "Dear Mr. Smith,\n\nPlease find attached.": drafting.SalutationForm.DEAR,
+        "Sam,\n\nQuick question.": drafting.SalutationForm.BARE_NAME,
     }
     for text, expected in cases.items():
         assert drafting.classify_inbound_salutation(text) is expected, text
@@ -460,7 +460,7 @@ def test_each_salutation_form_is_classified() -> None:
 
 def test_the_last_salutation_wins_because_bodies_join_oldest_to_newest() -> None:
     """Joined oldest-first, so the LAST salutation belongs to the newest message."""
-    thread = "Dear Mr. Rojas,\n\nOriginal note.\n\nHey Rico,\n\nFollowing up."
+    thread = "Dear Mr. Smith,\n\nOriginal note.\n\nHey Sam,\n\nFollowing up."
     assert drafting.classify_inbound_salutation(thread) is drafting.SalutationForm.HEY
 
 
@@ -473,8 +473,8 @@ def test_no_salutation_anywhere_is_none() -> None:
 
 
 def test_a_bare_lowercase_name_is_not_a_bare_name_salutation() -> None:
-    """``rico,`` is prose mid-sentence far more often than it is a greeting."""
-    assert drafting.classify_inbound_salutation("rico,\n\nhello") is not (
+    """``sam,`` is prose mid-sentence far more often than it is a greeting."""
+    assert drafting.classify_inbound_salutation("sam,\n\nhello") is not (
         drafting.SalutationForm.BARE_NAME
     )
 
@@ -493,7 +493,7 @@ def test_every_salutation_form_has_a_mirror_directive() -> None:
 
 def test_mirror_policy_appends_exactly_one_greeting_rule() -> None:
     prompt = drafting.build_body_prompt(
-        "Hey Rico,\n\nQuick one.", _profile(greeting_policy="mirror")
+        "Hey Sam,\n\nQuick one.", _profile(greeting_policy="mirror")
     )
     assert prompt.count("- GREETING:") == 1
     assert drafting.MIRROR_DIRECTIVES[drafting.SalutationForm.HEY] in prompt
@@ -501,7 +501,7 @@ def test_mirror_policy_appends_exactly_one_greeting_rule() -> None:
 
 def test_the_greeting_rule_follows_the_classified_form() -> None:
     dear = drafting.build_body_prompt(
-        "Dear Mr. Rojas,\n\nPlease advise.", _profile(greeting_policy="mirror")
+        "Dear Mr. Smith,\n\nPlease advise.", _profile(greeting_policy="mirror")
     )
     assert drafting.MIRROR_DIRECTIVES[drafting.SalutationForm.DEAR] in dear
     assert drafting.MIRROR_DIRECTIVES[drafting.SalutationForm.HEY] not in dear
@@ -516,7 +516,7 @@ def test_a_cold_thread_with_no_salutation_gets_the_none_directive() -> None:
 
 def test_fixed_policy_leaves_the_prompt_byte_identical_to_the_default() -> None:
     """The default path does not change. Absence of the marker is the assertion."""
-    thread = "Hey Rico,\n\nQuick one."
+    thread = "Hey Sam,\n\nQuick one."
     fixed = drafting.build_body_prompt(thread, _profile(greeting_policy="fixed"))
     assert "- GREETING:" not in fixed
     assert fixed == drafting.build_body_prompt(thread, _profile())
@@ -598,8 +598,8 @@ def test_the_calendar_placeholder_line_never_trips_the_wrap_detector() -> None:
 
 
 def test_short_natural_lines_pass() -> None:
-    body = "Rico,\n\nGot it. Sending Thursday.\n\nThanks,\nRico"
-    assert drafting.enforce_body_constraints(body).startswith("Rico,")
+    body = "Sam,\n\nGot it. Sending Thursday.\n\nThanks,\nRico"
+    assert drafting.enforce_body_constraints(body).startswith("Sam,")
 
 
 def test_slop_is_refused_before_the_placeholder_is_appended() -> None:

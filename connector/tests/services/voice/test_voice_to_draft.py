@@ -18,7 +18,7 @@ chosen so that a grep for them can only match this file. That is deliberate on
 two counts: nothing reads the real profile store at
 ``~/Library/Application Support/inbox-zero-connector/voice-profiles.json``, and
 nobody reading a failure later mistakes a fixture for a measured fact about how
-Rico writes. Pinning a test to real measured habits would also make it fail as
+the owner writes. Pinning a test to real measured habits would also make it fail as
 soon as the owner sent more mail, which is a test that decays by design.
 
 Every test drives ``path=`` explicitly into a ``tmp_path`` store. The real

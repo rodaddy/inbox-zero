@@ -424,7 +424,7 @@ ledger from what the owner confirms. This lane is the same posture as the
 `inbox-follow-up` kit and it is a perfectly good way to use this kit — say so
 without apology. The honest caveat belongs here too: the text they paste goes to
 whatever AI they are using, exactly like anything else they type into it. For
-confidential or privileged mail, which AI and which plan matters. Their AI,
+confidential or regulated mail, which AI and which plan matters. Their AI,
 their account, their call.
 
 ### Record the lane — `branding/mail-lane.md`

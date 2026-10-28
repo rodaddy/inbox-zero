@@ -10,8 +10,8 @@ THE PROBLEM THIS SOLVES
     The unattended watcher used to look only at Inbox, which is wrong in a real
     tenant: server-side Exchange rules move mail OUT of Inbox before the
     connector sees it, so an Inbox-only watcher silently misses whatever those
-    rules touched. Widening it is where a connector in a law firm can do real
-    damage -- shared mailboxes, matter files, and privileged material are
+    rules touched. Widening it is where a connector in any business can do real
+    damage -- shared mailboxes, client files, and confidential material are
     folders a client needs to be able to say NEVER about.
 
     So the model is a MODE plus two lists, matching what a client actually says
@@ -85,8 +85,8 @@ class MailboxScope(Section):
     real deployment: server-side Exchange rules move mail OUT of Inbox before
     the connector ever sees it, so an Inbox-only watcher silently misses the
     mail those rules touched. Widening it, though, is the exact place a
-    connector in a law firm can do real damage -- shared mailboxes, matter
-    files, and privileged material are folders that must NEVER be read, and
+    connector in any business can do real damage -- shared mailboxes, client
+    files, and confidential material are folders that must NEVER be read, and
     "never" has to be expressible as data the client named.
 
     So this is a MODE plus two lists, matching what a client actually says in
@@ -140,7 +140,7 @@ class MailboxScope(Section):
     single scope question and nothing may re-derive scope from the raw fields;
     a flag passed at each call site is a decision made separately by every
     caller, and the caller that forgets it silently gets flat matching -- which
-    is the direction that READS the privileged child. Installed once beside the
+    is the direction that READS the excluded child. Installed once beside the
     mode and the lists, it travels with the answer it qualifies and no caller
     can drop it. The scope is already keyed per provider in ``ConnectorConfig``,
     so the installer has exactly the right seam to set it.
@@ -189,7 +189,7 @@ class MailboxScope(Section):
         ``only_listed`` with nothing included would read as "no folders". Both
         mean the human was asked which folders to leave alone and answered
         nothing. Guessing either way is wrong: one silently reads the shared
-        matter mailbox, the other silently watches nothing while reporting
+        client mailbox, the other silently watches nothing while reporting
         success. Fail at load, name the field, and make somebody answer.
         """
         if self.mode == "all_except" and not self.excluded_folders:
@@ -214,7 +214,7 @@ class MailboxScope(Section):
                 f"mailbox_scope names the same folder in both lists: {', '.join(overlap)}. "
                 "ACTION REQUIRED: put each folder in exactly one list -- a folder that "
                 "is both included and excluded has no defensible answer, and picking "
-                "one would make a privileged folder's fate depend on our tie-break "
+                "one would make a confidential folder's fate depend on our tie-break "
                 "rather than the client's instruction."
             )
         return self
@@ -233,9 +233,9 @@ class MailboxScope(Section):
         THE PARENT'S ANSWER GOVERNS THE SUBTREE, in both directions. Excluding
         ``Clients`` excludes ``Clients/Smith``; including ``Clients`` includes
         it. Both readings come from the same sentence a client actually says:
-        a firm that points at ``Clients`` and says "never" means the matters
-        inside it, and a firm that points at the same label and says "watch
-        this" means the same matters. Splitting the two -- exclusion cascading
+        a business that points at ``Clients`` and says "never" means the client
+        folders inside it, and one that points at the same label and says "watch
+        this" means the same folders. Splitting the two -- exclusion cascading
         while inclusion did not -- would make a label's fate depend on which
         list it was written in rather than on what the client said.
 
@@ -330,7 +330,7 @@ class MailboxScope(Section):
 
         Every caller asks this and nothing re-derives scope from the raw
         fields, because a second implementation of this decision is a second
-        chance to read a privileged folder.
+        chance to read an excluded folder.
 
         MATCHING IS CASE-INSENSITIVE, and that is a security property rather
         than a convenience. Outlook folder names are not case-sensitive to the
@@ -429,7 +429,7 @@ class MailboxScope(Section):
         labels simultaneously, and a message labelled both ``Billing`` and
         ``Client Matters`` is a normal, uncontrived mailbox state. Asking
         ``covers`` once per label and combining the answers ad hoc in each
-        caller is how a privileged label gets read: whichever caller is written
+        caller is how an excluded label gets read: whichever caller is written
         first picks a combining rule by accident, and the accident is invisible
         because nothing errors and nothing logs.
 
@@ -439,11 +439,11 @@ class MailboxScope(Section):
         in-scope containers can outvote a single out-of-scope one. The only
         alternative worth naming is any-inclusion-wins, and it is rejected on
         purpose: it would read exactly the mail a client asked us to stay out
-        of, because the way privileged mail actually appears is a matter email
+        of, because the way confidential mail actually appears is a client email
         that ALSO carries a benign label. A client who says "never read Client
         Matters" is not saying "unless it is also Billing", and a rule that
         reads it anyway breaks the promise in the one case the promise was
-        made for. When a mailbox may hold privileged material, the conservative
+        made for. When a mailbox may hold confidential material, the conservative
         direction is the only safe one; a false refusal costs a summary the
         client can ask for by hand, a false read cannot be taken back.
 

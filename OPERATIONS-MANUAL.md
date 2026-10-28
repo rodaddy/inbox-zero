@@ -58,7 +58,7 @@ goes and keeps your ledger from what you confirm. Nothing about your email
 account can be broken into, because nothing is connected to it. The honest
 caveat: the text you paste goes to whatever AI you are using, same as anything
 else you type into it. For everyday mail that is nothing. For confidential or
-privileged mail, which AI and which plan matters — your AI, your account, your
+regulated mail, which AI and which plan matters — your AI, your account, your
 call.
 
 You can start on lane 3 and move up to lane 1 later without reinstalling
@@ -271,7 +271,7 @@ did not want it, it is one sentence away from coming back.
 
 Everything above is about what the connector's permission can do. Whatever AI
 you run this in has its own terms about what it does with the text of your mail,
-and that is between you and them. If you handle privileged or regulated mail,
+and that is between you and them. If you handle confidential or regulated mail,
 that conversation is worth having on purpose, with whoever advises you.
 
 ## When an email tries to give orders

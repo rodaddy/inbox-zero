@@ -141,7 +141,7 @@ without reading an entire mailbox on first run.
 
 Bounded rather than exhaustive on purpose. An unbounded first read of a
 years-old mailbox is a large, slow, expensive operation whose results are
-almost all stale by definition, and on a law-firm mailbox it is also a much
+almost all stale by definition, and on a busy business mailbox it is also a much
 larger read than the owner expected to authorise. The messages this misses are
 not lost: they were already in the mailbox before the watcher existed, and
 anything that arrives after the cold start appears on the very next round.

@@ -21,10 +21,10 @@ import pytest
 from loguru import logger
 
 from _watch_harness import (
+    CONFIDENTIAL_ID,
     FINAL_CURSOR,
     FOLDER,
     INBOX_ID,
-    PRIVILEGED_ID,
     CountingClassifier,
     _context,
     _FiledIdProvider,
@@ -71,7 +71,7 @@ DEST_ID = "Folder_Business_Action"
 
 
 def _graph_containers() -> tuple[Container, ...]:
-    """Inbox, a privileged folder, and the taxonomy destination as real folders.
+    """Inbox, a confidential folder, and the taxonomy destination as real folders.
 
     A Graph mailbox watches each folder as its own delta stream, so the folder
     a message is filed INTO is a stream of its own -- which is the whole of
@@ -80,7 +80,7 @@ def _graph_containers() -> tuple[Container, ...]:
     return (
         Container(id=INBOX_ID, name="Inbox", well_known="inbox", parent_id=None, exclusive=True),
         Container(
-            id=PRIVILEGED_ID,
+            id=CONFIDENTIAL_ID,
             name="Client Matters",
             well_known=None,
             parent_id=None,

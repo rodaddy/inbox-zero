@@ -1,7 +1,7 @@
 """The Sprint 3 demo, executed as a test. Section 6 of the sprint plan, verbatim.
 
 This module is the DEMO RECEIPT, not a unit test of anything. Every assertion
-here restates a line the sprint plan promised Rico would see on his terminal,
+here restates a line the sprint plan promised the operator would see on their terminal,
 and the whole file exists so that "it learns" is a transcript rather than a
 claim. The unit-level proofs live elsewhere -- ``test_learned.py`` owns the
 store, ``test_classify_learned_pass.py`` owns the wiring, ``test_watcher.py``
